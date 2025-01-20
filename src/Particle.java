@@ -13,8 +13,8 @@ public class Particle {
 
     private double weight;
 
-    private static final double POSITION_NOISE = 0.05;
-    private static final double ANGLE_NOISE = 0.001;
+    private static final double POSITION_NOISE = 0.0;
+    private static final double ANGLE_NOISE = 0.0;
 
     public Particle(MyDirectedPoint position, OccupancyGrid occupancyGrid) {
         this.pose = position.copy();

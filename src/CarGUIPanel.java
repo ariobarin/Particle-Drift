@@ -35,7 +35,8 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         setFocusable(true);
         requestFocus();
 
-        startSimulation();
+        // startSimulation();
+        startReal();
         
         // Add listeners
         addKeyListener(this);
@@ -51,6 +52,7 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
 
     public void startReal() {
         current = REAL;
+        currentView = new RealView(this);
     }
 
     public void startSettings() {
@@ -66,7 +68,7 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
             frameCount = 0;
             lastFPSCheck = currentTime;
         }
-        System.out.println("FPS: " + currentFPS);
+        // System.out.println("FPS: " + currentFPS);
 
         currentView.step(keysDown, keysPressed);
 
@@ -86,6 +88,7 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
             keysPressed[index] = true;
             keysDown[index] = true;
         }
+        currentView.keyPressed(e);
     }
 
     @Override
@@ -98,6 +101,7 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         }
         keysDown[index] = false;
         keysPressed[index] = false;
+        currentView.keyReleased(e);
     }
 
     @Override
@@ -115,13 +119,12 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
             return;
         }
         
-        if (current == SIM) {
-            currentView.mousePressed(e);
-        }
+        currentView.mousePressed(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        currentView.mouseReleased(e);
     }
 
     @Override
@@ -138,9 +141,7 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (current == SIM) {
-            currentView.mouseMoved(e);
-        }
+        currentView.mouseMoved(e);
     }
 
     @Override
