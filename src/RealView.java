@@ -1,6 +1,6 @@
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class RealView extends View {
@@ -23,11 +23,27 @@ public class RealView extends View {
 
     private final ParticleFilter particleFilter;
 
-    public RealView(CarGUIPanel panel) {
-        super(panel);
+    private static final BufferedImage exitIcon;
+    private final Button exitButton;
+
+    static {
+        exitIcon = Util.loadImage("assets/exit_icon.png");
+    }
+
+    public RealView(CarGUIPanel panel, int viewIndex) {
+        super(panel, viewIndex);
 
         carSocket = new CarSocket();
         particleFilter = new ParticleFilter();
+
+        // create exit button in top-left corner
+        exitButton = new Button(
+            () -> 10,  // x supplier
+            () -> 10,  // y supplier
+            50, 50,    // width, height
+            exitIcon, true,               // icon and initial state
+            () -> nextView = CarGUIPanel.MENU  // onClick handler
+        );
     }
 
     @Override
@@ -77,17 +93,4 @@ public class RealView extends View {
         moving = false;
         carSocket.stopMovement();
     }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-    }
-
 }
