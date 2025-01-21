@@ -1,11 +1,8 @@
 import java.io.*;
-import java.net.DatagramSocketImplFactory;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
-import java.util.List;
-import java.util.ArrayList;
 
 class CarSocket {
 
@@ -13,9 +10,9 @@ class CarSocket {
     private Timer timer;
 
     public static final int STEPS = 200;
-    public static final int RESOLUTION = 100;
+    public static final int RESOLUTION = 40;
     public static final int DATAPERPACKET = 10;
-    public static final int SPS = 50;
+    public static final int SPS = 10;
 
     public static final int RECEIVE_MS = 5;
     public static final int SEND_MS = 2000;

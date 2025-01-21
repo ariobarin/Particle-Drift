@@ -53,14 +53,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 		timer = new Timer(1000 / 60, this);
 		timer.start();
 		LiCar = new CarSocket();
-		setPreferredSize(new Dimension(WIDTH, HEIGHT));
-
-		
-			
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));			
 		}
-
-		
-
 
 @Override
 	public void actionPerformed(ActionEvent e){

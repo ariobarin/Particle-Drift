@@ -11,9 +11,9 @@ public class RealView extends View {
     private int PORT32 = 8080;
     private String IP8266 = "10.217.210.187";
     private int PORT8266 = 80;
-
+    
     private int connectKey = KeyEvent.VK_UP;
-
+    
     private final int moveForwardKey = KeyEvent.VK_W;
     private final int moveBackwardKey = KeyEvent.VK_S;
     private final int turnLeftKey = KeyEvent.VK_A;
