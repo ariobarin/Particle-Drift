@@ -1,0 +1,12 @@
+
+world5mask.png
+world5.png
+2000
+1500
+1
+50
+50
+0
+0
+0
+explored1.png

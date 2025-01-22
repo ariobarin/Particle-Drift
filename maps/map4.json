@@ -1,8 +1,8 @@
 {
-    "mask": "world3mask.png",
-    "map": "world3.png",
-    "width": 1200,
-    "height": 900,
+    "mask": "world4mask.png",
+    "map": "world4.png",
+    "width": 1400,
+    "height": 1000,
     "resolution": 1,
     "centerX": 100,
     "centerY": 100,

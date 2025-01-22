@@ -1,0 +1,12 @@
+
+mask1.png
+map1.png
+800
+600
+1
+400
+300
+0
+0
+0
+explored1.png

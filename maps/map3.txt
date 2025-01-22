@@ -1,0 +1,12 @@
+
+world3mask.png
+world3.png
+1200
+900
+1
+100
+100
+0
+0
+0
+explored1.png
