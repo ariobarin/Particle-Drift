@@ -22,7 +22,7 @@ public class SimulationView extends View {
     private final Button[] viewButtons;
     private final Button exitButton;
 
-    private final World world;
+    private final Simulation world;
 
     static {
         worldIcon = Util.loadImage("assets/world_icon.png");
@@ -32,9 +32,9 @@ public class SimulationView extends View {
         exitIcon = Util.loadImage("assets/back_icon.png");
     }
 
-    public SimulationView(World world, CarGUIPanel panel, int viewIndex) {
-        super(panel, viewIndex);
-        this.world = world;
+    public SimulationView(CarGUIPanel panel, String mapFile) {
+        super(panel);
+        this.world = new Simulation(mapFile);
         viewButtons = new Button[4];
         initializeButtons();
         

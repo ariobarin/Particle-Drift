@@ -25,8 +25,8 @@ public class MenuView extends View {
         backgroundRoad = Util.loadImage("assets/main_bg.png");
     }
 
-    public MenuView(CarGUIPanel panel, int viewIndex) {
-        super(panel, viewIndex);
+    public MenuView(CarGUIPanel panel) {
+        super(panel);
         
         // create left and right matrix effects
         leftMatrixEffect = new MatrixEffect(
@@ -50,7 +50,7 @@ public class MenuView extends View {
             80, 100,                                  // width, height
             simulationButtonIcon,
             true,                                     // initial state
-            () -> nextView = CarGUIPanel.SIM         // onClick handler
+            () -> panel.startSimulationSelecter()         // onClick handler
         );
         
         realButton = new Button(
@@ -59,7 +59,7 @@ public class MenuView extends View {
             80, 100,                                  // width, height
             realButtonIcon,
             true,                                     // initial state
-            () -> nextView = CarGUIPanel.REAL         // onClick handler
+            () -> panel.startReal()         // onClick handler
         );
     }
 

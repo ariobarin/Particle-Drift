@@ -4,11 +4,9 @@ import java.awt.event.MouseEvent;
 
 public abstract class View {
     protected CarGUIPanel panel;
-    protected int nextView;
 
-    public View(CarGUIPanel panel, int viewIndex) {
+    public View(CarGUIPanel panel) {
         this.panel = panel;
-        this.nextView = viewIndex;
     }
 
     protected int getWidth() { return panel.getWidth(); }
@@ -29,8 +27,4 @@ public abstract class View {
     public void mouseMoved(MouseEvent e) {}
     
     public abstract void draw(Graphics g);  
-
-    public int nextView() {
-        return nextView;
-    }
 }

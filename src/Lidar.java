@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lidar {
+    private final Simulation simulation;
     private final MyAngle bearing;
 
     // tick = 1.8 degrees
@@ -24,7 +25,8 @@ public class Lidar {
 
     public static final double READING_NOISE = 1.0;
 
-    public Lidar() {
+    public Lidar(Simulation simulation) {
+        this.simulation = simulation;
         bearing = new MyAngle(0);
     }
 
@@ -51,7 +53,7 @@ public class Lidar {
         List<MyPoint> points = RayCaster.getCellsAlongRay(start, end);
 
         for (MyPoint point : points) {
-            if (!World.isAir((int) point.getX(), (int) point.getY())) {
+            if (!simulation.isAir((int) point.getX(), (int) point.getY())) {
                 return randomizeReading(point.distance(lidarPosition));
             }
         }
