@@ -1,5 +1,5 @@
 /*
- * name: Ario Barin Ostovary
+ * Ario Barin Ostovary
  */
 
 import java.awt.*;

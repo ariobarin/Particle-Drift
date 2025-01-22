@@ -1,3 +1,10 @@
+/*
+ * SimulationSelecterView.java
+ * Ario Barin Ostovary
+ * Class for the simulation selecter view
+ * Displays the simulation selecter view
+ */
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -37,11 +44,11 @@ public class SimulationSelecterView extends View {
         
         mapButtons = new Button[5];
         
-        // create exit button in top-left corner
+        // create exit button in top-left corner with 2x size
         exitButton = new Button(
-            () -> 10,  // x position
-            () -> 10,  // y position
-            50, 50,    // width, height
+            () -> 20,  // x position (adjusted for larger size)
+            () -> 20,  // y position (adjusted for larger size)
+            100, 100,  // width, height (2x larger)
             exitIcon,  // icon
             true,      // initial state
             () -> panel.startMenu()  // onClick handler
