@@ -13,6 +13,7 @@ public class Particle {
 
     private double weight;
 
+    // noise for the position and angle to simulate the car's movement
     private static final double POSITION_NOISE = 0.0;
     private static final double ANGLE_NOISE = 0.0;
 
@@ -39,6 +40,7 @@ public class Particle {
     }
 
     public MyDirectedPoint getGridPose() {
+        // get the position of the particle in the grid of the occupancy grid
         int x = occupancyGrid.worldToGridX(pose.getX());
         int y = occupancyGrid.worldToGridY(pose.getY());
         return new MyDirectedPoint(x, y, pose.getAngle());
@@ -52,6 +54,7 @@ public class Particle {
         double dy = Util.randomGaussian(POSITION_NOISE);
         pose.move(dx, dy);
 
+        // offset the angle by a gaussian noise
         double deltaAngle = rotation + Util.randomGaussian(ANGLE_NOISE);
         pose.rotate(deltaAngle);
     }
@@ -59,6 +62,7 @@ public class Particle {
     public void updateWeight(List<MyVector> lidarReadings) {
         double newLogWeight = 0.0;
 
+        // calculate the new log weight for the particle
         for (MyVector reading : lidarReadings) {
             double expectedReading = simulateLidarReading(reading.getDirection());
             double error = reading.getMagnitude() - expectedReading;
@@ -66,14 +70,17 @@ public class Particle {
             newLogWeight += currentLogWeight;
         }
 
+        // update the weight
         this.weight = Math.exp(newLogWeight);
     }
 
     private double simulateLidarReading(MyAngle direction) {
+        // simulate the lidar reading by casting rays from the particle's position
         MyDirectedPoint sensor = pose.copy();
         sensor.rotate(direction);
         sensor.move(Lidar.MAX_DISTANCE);
 
+        // get the start and end positions of the ray in the grid
         int startX = occupancyGrid.worldToGridX(pose.getX());
         int startY = occupancyGrid.worldToGridY(pose.getY());
         int endX = occupancyGrid.worldToGridX(sensor.getX());
@@ -81,12 +88,14 @@ public class Particle {
 
         List<MyPoint> cells = RayCaster.getCellsAlongRay(startX, startY, endX, endY);
 
+        // check each cell along the ray
         for (MyPoint cell : cells) {
             if (cell.getX() < 0 || cell.getY() < 0 || cell.getX() >= occupancyGrid.getWidth()
                     || cell.getY() >= occupancyGrid.getHeight()) {
                 continue; // might be "break;"
             }
 
+            // if the cell is occupied, return the distance to the obstacle
             if (occupancyGrid.isOccupiedCell((int) cell.getX(), (int) cell.getY())) {
                 double obstacleX = occupancyGrid.gridToWorldX(cell.getX());
                 double obstacleY = occupancyGrid.gridToWorldY(cell.getY());
@@ -98,6 +107,7 @@ public class Particle {
             }
         }
 
+        // if no obstacle is found, return the maximum distance - simulating the lidar's range
         return Lidar.MAX_DISTANCE;
     }
 

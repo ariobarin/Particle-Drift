@@ -19,6 +19,7 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
     private final boolean[] keysDown;    // tracks continuously held keys
     private final boolean[] keysPressed; // tracks single key press events
 
+    // FPS tracking
     private final Timer timer;
     private int currentFPS = 0;
     private int frameCount = 0;
@@ -34,9 +35,10 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         setFocusable(true);
         requestFocus();
 
+        // start the menu view
+        startMenu();
         // startSimulation();
         // startReal();
-        startMenu();
         
         // Add listeners
         addKeyListener(this);
@@ -45,18 +47,16 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         timer.start();
     }
 
+    // methods to start different views
     public void startMenu() {
         currentView = new MenuView(this);
     }
-
     public void startSimulationSelecter() {
         currentView = new SimulationSelecterView(this);
     }
-
     public void startSimulation(String mapFile) {
         currentView = new SimulationView(this, mapFile);
     }
-
     public void startReal() {
         currentView = new RealView(this);
     }
@@ -65,12 +65,14 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         frameCount++;
         long currentTime = System.currentTimeMillis();
 
-        if (currentTime - lastFPSCheck >= 1000) { // Update FPS every second
+        if (currentTime - lastFPSCheck >= 1000) { // update FPS every second
             currentFPS = frameCount;
             frameCount = 0;
             lastFPSCheck = currentTime;
         }
         // System.out.println("FPS: " + currentFPS);
+
+        // update the current view
         currentView.step(keysDown, keysPressed);
 
         // clear keysPressed
@@ -86,9 +88,10 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
 
+        // draw the current view
         currentView.draw(g);
 
-        // draw FPS counter in top right corner
+        // draw FPS counter in top right corner over the current view
         String fpsText = "FPS: " + currentFPS;
         g.setColor(Color.GREEN);
         g.setFont(new Font("Arial", Font.BOLD, 16));
@@ -102,16 +105,18 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         int index = e.getKeyCode();
         if (index >= keysDown.length) return;
 
-        // handle ESC key to exit program
+        // ESC key to exit program
         if (index == ESC_KEY) {
             System.exit(0);
         }
 
+        // track key presses
         if (!keysDown[index]) {
             keysPressed[index] = true;
             keysDown[index] = true;
         }
 
+        // update the current view
         currentView.keyPressed(e);
     }
 
@@ -120,55 +125,34 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         int index = e.getKeyCode();
         if (index >= keysDown.length) return;
 
+        // track key releases
         keysDown[index] = false;
         keysPressed[index] = false;
 
+        // update the current view
         currentView.keyReleased(e);
     }
 
+    // update the current view
     @Override
-    public void keyTyped(KeyEvent e) {
-        currentView.keyTyped(e);
-    }
-
+    public void keyTyped(KeyEvent e) { currentView.keyTyped(e); }
     @Override
-    public void mouseClicked(MouseEvent e) {
-        currentView.mouseClicked(e);
-    }
-
+    public void mouseClicked(MouseEvent e) { currentView.mouseClicked(e); }
     @Override
-    public void mousePressed(MouseEvent e) {
-        currentView.mousePressed(e);
-    }
-
+    public void mousePressed(MouseEvent e) { currentView.mousePressed(e); }
     @Override
-    public void mouseReleased(MouseEvent e) {
-        currentView.mouseReleased(e);
-    }
-
+    public void mouseReleased(MouseEvent e) { currentView.mouseReleased(e); }
     @Override
-    public void mouseEntered(MouseEvent e) {
-        currentView.mouseEntered(e);
-    }
-
+    public void mouseEntered(MouseEvent e) { currentView.mouseEntered(e); }
     @Override
-    public void mouseExited(MouseEvent e) {
-        currentView.mouseExited(e);
-    }
-
+    public void mouseExited(MouseEvent e) { currentView.mouseExited(e); }
     @Override
-    public void mouseDragged(MouseEvent e) {
-        currentView.mouseDragged(e);
-    }
-
+    public void mouseDragged(MouseEvent e) { currentView.mouseDragged(e); }
     @Override
-    public void mouseMoved(MouseEvent e) {
-        currentView.mouseMoved(e);
-    }
-
+    public void mouseMoved(MouseEvent e) { currentView.mouseMoved(e); }
     @Override
-    public void actionPerformed(ActionEvent e) {
-        step();
+    public void actionPerformed(ActionEvent e) { 
+        step(); 
         repaint();
     }
 }

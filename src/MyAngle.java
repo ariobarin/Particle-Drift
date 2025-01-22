@@ -24,16 +24,17 @@ public class MyAngle {
     }
 
     private double normalize(double angle) {
-        // Normalize the angle to be between 0 and 2*pi
+        // normalize the angle to be between 0 and 2*pi
         return (angle + Math.PI * 2) % (Math.PI * 2);
     }
 
     public void rotate(double angle) {
+        // normalize after adding the angle 
         this.angle = normalize(this.angle + angle);
     }
 
     public void rotate(MyAngle other) {
-        this.angle = normalize(this.angle + other.getRadians());
+        rotate(other.getRadians());
     }
 
     public MyAngle copy() {
@@ -42,6 +43,6 @@ public class MyAngle {
 
     @Override
     public String toString() {
-        return "Radians: " + angle;
+        return String.format("Radians: %.2f", angle);
     }
 }

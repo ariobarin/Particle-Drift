@@ -36,7 +36,8 @@ public class Simulation {
     public Simulation(String mapFile) throws IOException {
         // load txt from "maps/" + mapFile
         BufferedReader reader = new BufferedReader(new FileReader("maps/" + mapFile));
-        // read map data
+
+        // read map data - i wish i could've used a json file instead but i couldn't get the json library to work
         this.maskFile = reader.readLine();
         this.mapFile = reader.readLine();
         int width = Integer.parseInt(reader.readLine());
@@ -49,10 +50,11 @@ public class Simulation {
         double startAngle = Double.parseDouble(reader.readLine());
         this.exploredFile = reader.readLine();
         
+        // calculate particle filter dimensions
         this.WORLD_WIDTH = width * resolution;
         this.WORLD_HEIGHT = height * resolution;
         
-        // load images from the maps directory
+        // load images from maps/
         mask = ImageIO.read(new File("maps/" + maskFile));
         bg = ImageIO.read(new File("maps/" + this.mapFile));
         
@@ -88,37 +90,43 @@ public class Simulation {
         g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
     }
 
+    // handles drawing a view of the world
+    // centerCar: whether to center the car on the view
+    // g2d: the graphics context to draw on
+    // backgroundColor: the color of the background
+    // drawOperations: the operations to draw on the view
     private void drawView(
             boolean centerCar,
             Graphics2D g2d,
             Color backgroundColor,
             Consumer<Graphics2D> drawOperations) {
-        // Get dimensions from the graphics context
+    
+        // get dimensions from the graphics context
         int viewportWidth = g2d.getClipBounds().width;
         int viewportHeight = g2d.getClipBounds().height;
 
-        // Initialize BufferedImage
+        // create a buffered image to draw on and the graphics context
         BufferedImage view = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = view.createGraphics();
 
-        // Calculate scaling factors
+        // calculate scaling factors
         double scaleX = viewportWidth / (double) WORLD_WIDTH;
         double scaleY = viewportHeight / (double) WORLD_HEIGHT;
         double scale = Math.min(scaleX, scaleY);
 
-        // Fill background
+        // fill background with background color
         graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, viewportWidth, viewportHeight);
 
-        // Center the view in the viewport
+        // center the view in the viewport
         int centerX = viewportWidth / 2;
         int centerY = viewportHeight / 2;
 
-        // Apply transformations
+        // apply transformations to center the view and scale it
         graphics.translate(centerX, centerY);
         graphics.scale(scale, scale);
 
-        // Only apply car-following transformations if this is not the fixed world view
+        // only apply following transformations if this is not the fixed world view
         if (centerCar) {
             MyDirectedPoint tankPosition = licar.getActualPosition();
             double tankX = tankPosition.getX();
@@ -128,17 +136,15 @@ public class Simulation {
             graphics.rotate(-tankAngle - Math.PI / 2);
             graphics.translate(-tankX, -tankY);
         } else {
-            // For fixed world view, just center the world
+            // for fixed world view, just center the world
             graphics.translate(-WORLD_WIDTH / 2, -WORLD_HEIGHT / 2);
         }
 
-        // Execute unique drawing operations
+        // execute unique drawing operations
         drawOperations.accept(graphics);
 
-        // Dispose temporary Graphics2D
         graphics.dispose();
 
-        // Draw the buffered image onto the main Graphics2D context
         g2d.drawImage(view, 0, 0, null);
     }
 
@@ -146,7 +152,8 @@ public class Simulation {
         licar.update(keys);
     }
 
-    public void drawSimulation(Graphics g) {
+    // draws the POV view of the car from above
+    public void drawPOV(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
         try {
             drawView(
@@ -162,6 +169,7 @@ public class Simulation {
         }
     }
 
+    // draws the lidar view of the car
     public void drawLidar(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
         try {
@@ -177,7 +185,8 @@ public class Simulation {
         }
     }
 
-    public void drawPOV(Graphics g) {
+    // draws the simulation view of the world - overview of the world
+    public void drawSimulation(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
         try {
             drawView(
@@ -193,6 +202,7 @@ public class Simulation {
         }
     }
 
+    // draws the occupancy grid of the world
     public void drawOccupancyGrid(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
         licar.drawOccupancyGrid(g2d);

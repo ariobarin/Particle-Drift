@@ -19,6 +19,7 @@ public class ParticleFilter {
     private List<Particle> particles;
     private final OccupancyGrid occupancyGrid;
 
+    // number of cm per cell (px)
     private static final int RESOLUTION = 5;
 
     private static final int STARTING_WIDTH = 100;
@@ -101,18 +102,18 @@ public class ParticleFilter {
     public void resample(int numParticles) {
         List<Particle> newParticles = new ArrayList<>();
 
-        // Calculate cumulative weights
+        // calculate cumulative weights
         double[] cumulativeWeights = new double[particles.size()];
         cumulativeWeights[0] = particles.get(0).getWeight();
         for (int i = 1; i < particles.size(); i++) {
             cumulativeWeights[i] = cumulativeWeights[i - 1] + particles.get(i).getWeight();
         }
 
-        // Resample particles
+        // resample particles
         for (int i = 0; i < numParticles; i++) {
             double randomValue = Util.randomDouble(0, 1);
 
-            // Binary search to find the particle
+            // binary search to find the particle
             int left = 0;
             int right = particles.size() - 1;
 
@@ -125,11 +126,10 @@ public class ParticleFilter {
                 }
             }
 
-            // Add a copy of the selected particle
+            // add a copy of the selected particle
             newParticles.add(particles.get(left).copy());
         }
 
-        // Replace old particles with new ones
         particles = newParticles;
     }
 
@@ -155,6 +155,7 @@ public class ParticleFilter {
     }
 
     public void updateGrid(List<MyVector> lidarReadings) {
+        // update the occupancy grid with the estimated position and lidar readings
         MyDirectedPoint pose = getEstimatedPosition();
         occupancyGrid.updateGrid(pose, lidarReadings);
     }
@@ -167,7 +168,7 @@ public class ParticleFilter {
         predict(speed, rotation);
         updateWeights(lidarReadings);
 
-        // Calculate number of particles based on linear interpolation
+        // calculate number of particles based on linear interpolation
         int numParticles;
         if (particleFilterCountDown > 0) {
             double progress = (double) particleFilterCountDown / RESAMPLE_COUNT_DOWN;
@@ -178,14 +179,16 @@ public class ParticleFilter {
         }
         resample(numParticles);
 
+        // update the occupancy grid with the estimated position and lidar readings
         updateGrid(lidarReadings);
     }
 
     public Color getColor(double probability) {
+        // get the color of the cell based on the probability
         if (probability > 0.7) {
-            return Color.BLACK; // Occupied
+            return Color.BLACK; // occupied
         } else if (probability < 0.3) {
-            return Color.WHITE; // Free
+            return Color.WHITE; // free
         } else {
             return new Color((int) (255 * probability), (int) (255 * probability), (int) (255 * probability));
         }
@@ -201,33 +204,37 @@ public class ParticleFilter {
         int width = bestGrid.getWidth();
         int height = bestGrid.getHeight();
 
-        // Create a new buffered image for this frame
+        // create a new buffered image for this frame
         BufferedImage bufferedWorld = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D bufferedGraphics = bufferedWorld.createGraphics();
 
-        // Copy the occupancy grid image
+        // copy the occupancy grid image
         bufferedGraphics.drawImage(occupancyGrid.getImage(), 0, 0, null);
 
-        // Draw particles on the buffered image
+        // draw particles on the buffered image
         int radius = 5;
         for (Particle particle : particles) {
             double logWeight = particle.getWeight();
 
+            // scale the probability to a color from 0 to 16777215
             double probability = Util.logitToProb(logWeight);
             int scaledValue = (int) Math.round(probability * 16777215);
             scaledValue = Math.min(Math.max(scaledValue, 0), 16777215);
 
+            // create the color
             Color particleColor = new Color(scaledValue);
             bufferedGraphics.setColor(particleColor);
 
             MyDirectedPoint gridPose = particle.getGridPose();
 
+            // draw the particle
             bufferedGraphics.drawOval(
                     (int) gridPose.getX() - radius,
                     (int) gridPose.getY() - radius,
                     2 * radius,
                     2 * radius);
 
+            // draw the particle's ray
             MyDirectedPoint end = gridPose.copy();
             end.move(radius * 3);
             bufferedGraphics.drawLine(
@@ -239,7 +246,7 @@ public class ParticleFilter {
 
         bufferedGraphics.dispose();
 
-        // Draw the final buffered image to the panel
+        // draw the final buffered image to the panel
         g.drawImage(bufferedWorld, 0, 0, panelWidth, panelHeight, null);
     }
 }

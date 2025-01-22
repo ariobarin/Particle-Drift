@@ -18,6 +18,7 @@ public class RayCaster {
         return getCellsAlongRay(startX, startY, endX, endY);
     }
 
+    // get the cells along the ray from start to end with Bresenham's line algorithm
     public static List<MyPoint> getCellsAlongRay(int startX, int startY, int endX, int endY) {
         List<MyPoint> cells = new ArrayList<>();
 

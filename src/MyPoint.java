@@ -30,7 +30,7 @@ public class MyPoint {
     }
 
     public void move(double distance, MyAngle angle) {
-        // Move the point by the given distance and angle
+        // move the point by the given distance and angle - component-wise
         x += distance * angle.getCos();
         y += distance * angle.getSin();
     }
@@ -41,7 +41,7 @@ public class MyPoint {
     }
 
     public double distance(MyPoint p) {
-        return Math.sqrt(Math.pow(p.getX() - x, 2) + Math.pow(p.getY() - y, 2));
+        return distance(p.getX(), p.getY());
     }
 
     public double distance(MyDirectedPoint p) {
@@ -49,15 +49,17 @@ public class MyPoint {
     }
 
     public double distance(double x, double y) {
+        // calculate the distance between two points
         return Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
     }
 
     public MyPoint copy() {
+        // copy the point deep
         return new MyPoint(x, y);
     }
 
     @Override
     public String toString() {
-        return "(X: " + x + ", Y: " + y + ")";
+        return String.format("(X: %.2f, Y: %.2f)", x, y);
     }
 }

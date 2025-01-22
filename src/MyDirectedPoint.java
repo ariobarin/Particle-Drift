@@ -83,6 +83,6 @@ public class MyDirectedPoint {
 
     @Override
     public String toString() {
-        return "(Point: " + point + ", Angle: " + angle + ")";
+        return String.format("(Point: %.2f, %.2f, Angle: %.2f)", point.getX(), point.getY(), angle.getRadians());
     }
 }

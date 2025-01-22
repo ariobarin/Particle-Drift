@@ -1,5 +1,8 @@
 /*
+ * MenuView.java
  * Ario Barin Ostovary
+ * Menu view for the project
+ * Can select between simulation and real car
  */
 
 import java.awt.Color;
@@ -11,6 +14,7 @@ import java.awt.image.BufferedImage;
 public class MenuView extends View {
     private final Button simulationButton;
     private final Button realButton;
+
     private final MatrixEffect leftMatrixEffect;
     private final MatrixEffect rightMatrixEffect;
 
@@ -20,6 +24,7 @@ public class MenuView extends View {
     private static final BufferedImage backgroundRoad;
     private static final BufferedImage titleImage;
 
+    // load images
     static {
         simulationButtonIcon = Util.loadImage("assets/sim_icon.png");
         realButtonIcon = Util.loadImage("assets/real_icon.png");
@@ -32,36 +37,36 @@ public class MenuView extends View {
         
         // create left and right matrix effects
         leftMatrixEffect = new MatrixEffect(
-            () -> 0,                                 // x offset for left side
-            () -> (panel.getWidth() - MIDDLE_GAP) / 2 - 40,     // width for left side
+            () -> 0,
+            () -> (panel.getWidth() - MIDDLE_GAP) / 2 - 40,
             () -> panel.getHeight(),
-            60  // half the original columns
+            30
         );
         
         rightMatrixEffect = new MatrixEffect(
-            () -> panel.getWidth() / 2 + MIDDLE_GAP / 2,   // x offset for right side
-            () -> (panel.getWidth() - MIDDLE_GAP) / 2,     // width for right side
+            () -> panel.getWidth() / 2 + MIDDLE_GAP / 2,
+            () -> (panel.getWidth() - MIDDLE_GAP) / 2,
             () -> panel.getHeight(),
-            60  // half the original columns
+            30
         );
         
         // create buttons with dynamic positioning
         simulationButton = new Button(
-            () -> panel.getWidth()/2 - 40,           // x supplier
-            () -> panel.getHeight()/2 - 100,           // y supplier
-            80, 100,                                  // width, height
+            () -> panel.getWidth()/2 - 40,
+            () -> panel.getHeight()/2 - 100,
+            80, 100,
             simulationButtonIcon,
-            true,                                     // initial state
-            () -> panel.startSimulationSelecter()         // onClick handler
+            true,
+            () -> panel.startSimulationSelecter()
         );
         
         realButton = new Button(
-            () -> panel.getWidth()/2 - 40,           // x supplier
-            () -> panel.getHeight()/2 + 50,           // y supplier
-            80, 100,                                  // width, height
+            () -> panel.getWidth()/2 - 40,
+            () -> panel.getHeight()/2 + 50,
+            80, 100,
             realButtonIcon,
-            true,                                     // initial state
-            () -> panel.startReal()         // onClick handler
+            true,
+            () -> panel.startReal()
         );
     }
 

@@ -25,10 +25,10 @@ public class SimulationView extends View {
     showReadingsToggle = KeyEvent.VK_3, 
     showSLAMToggle = KeyEvent.VK_4;
     
-    private static final BufferedImage worldIcon, povIcon, lidarIcon, slamIcon, exitIcon;
+    private static final BufferedImage worldIcon, povIcon, lidarIcon, slamIcon, backIcon;
     private final int buttonWidth = 50, buttonHeight = 50;
     private final Button[] viewButtons;
-    private final Button exitButton;
+    private final Button backButton;
 
     private final Simulation world;
 
@@ -37,7 +37,7 @@ public class SimulationView extends View {
         povIcon = Util.loadImage("assets/local_icon.png");
         lidarIcon = Util.loadImage("assets/lidar_icon.png");
         slamIcon = Util.loadImage("assets/slam_icon.png");
-        exitIcon = Util.loadImage("assets/back_icon.png");
+        backIcon = Util.loadImage("assets/back_icon.png");
     }
 
     public SimulationView(CarGUIPanel panel, String mapFile) {
@@ -50,13 +50,13 @@ public class SimulationView extends View {
         viewButtons = new Button[4];
         initializeButtons();
         
-        // create exit button in top-left corner with 2x size
-        exitButton = new Button(
-            () -> 20,  // x supplier (adjusted for larger size)
-            () -> 20,  // y supplier (adjusted for larger size)
-            100, 100,  // width, height (2x larger)
-            exitIcon, true,               // icon and initial state
-            () -> panel.startSimulationSelecter()  // onClick handler - fixed to return to simulation selector
+        // back button
+        backButton = new Button(
+            () -> 20,
+            () -> 20,
+            100, 100,
+            backIcon, true,
+            () -> panel.startSimulationSelecter()
         );
     }
 
@@ -65,41 +65,49 @@ public class SimulationView extends View {
         int iconHeight = 50;
         int totalWidth = iconWidth * 4;
 
+        // world button
         viewButtons[0] = new Button(
-            () -> panel.getWidth()/2 - totalWidth/2,                  // x supplier
-            () -> 10,                                                 // y supplier
+            () -> panel.getWidth()/2 - totalWidth/2,
+            () -> 10,
             iconWidth, iconHeight, worldIcon, showWorld,
             () -> {
+                // toggle world and update button state
                 showWorld = !showWorld;
                 viewButtons[0].setState(showWorld);
             }
         );
 
+        // pov button
         viewButtons[1] = new Button(
-            () -> panel.getWidth()/2 - totalWidth/2 + iconWidth,      // x supplier
-            () -> 10,                                                 // y supplier
+            () -> panel.getWidth()/2 - totalWidth/2 + iconWidth,
+            () -> 10,
             iconWidth, iconHeight, povIcon, showPOV,
             () -> {
+                // toggle pov and update button state
                 showPOV = !showPOV;
                 viewButtons[1].setState(showPOV);
             }
         );
 
+        // lidar button
         viewButtons[2] = new Button(
-            () -> panel.getWidth()/2 - totalWidth/2 + 2 * iconWidth,  // x supplier
-            () -> 10,                                                 // y supplier
+            () -> panel.getWidth()/2 - totalWidth/2 + 2 * iconWidth,
+            () -> 10,
             iconWidth, iconHeight, lidarIcon, showReadings,
             () -> {
+                // toggle lidar and update button state
                 showReadings = !showReadings;
                 viewButtons[2].setState(showReadings);
             }
         );
 
+        // slam button
         viewButtons[3] = new Button(
-            () -> panel.getWidth()/2 - totalWidth/2 + 3 * iconWidth,  // x supplier
-            () -> 10,                                                 // y supplier
+            () -> panel.getWidth()/2 - totalWidth/2 + 3 * iconWidth,
+            () -> 10,
             iconWidth, iconHeight, slamIcon, showSLAM,
             () -> {
+                // toggle slam and update button state
                 showSLAM = !showSLAM;
                 viewButtons[3].setState(showSLAM);
             }
@@ -108,14 +116,15 @@ public class SimulationView extends View {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        // check if any view button is clicked
         for (Button button : viewButtons) {
             if (button.contains(e.getX(), e.getY())) {
                 button.click();
                 return;
             }
         }
-        if (exitButton.contains(e.getX(), e.getY())) {
-            exitButton.click();
+        if (backButton.contains(e.getX(), e.getY())) {
+            backButton.click();
         }
     }
 
@@ -124,20 +133,21 @@ public class SimulationView extends View {
         for (Button button : viewButtons) {
             button.setHovered(button.contains(e.getX(), e.getY()));
         }
-        exitButton.setHovered(exitButton.contains(e.getX(), e.getY()));
+        backButton.setHovered(backButton.contains(e.getX(), e.getY()));
     }
 
     private void drawButtons(Graphics g) {
         for (Button button : viewButtons) {
             button.draw(g);
         }
-        exitButton.draw(g);
+        backButton.draw(g);
     }
 
     @Override
     public void step(boolean[] keysDown, boolean[] keysPressed) {
         world.update(keysDown);
 
+        // toggle view buttons - have to update the button state (probably could have been done better)
         if (keysPressed[showWorldToggle]) {
             showWorld = !showWorld;
             viewButtons[0].setState(showWorld);
@@ -209,7 +219,7 @@ public class SimulationView extends View {
             BufferedImage simView = new BufferedImage(viewWidth, viewHeight, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = simView.createGraphics();
             g2d.setClip(0, 0, viewWidth, viewHeight);
-            world.drawSimulation(g2d);
+            world.drawPOV(g2d);
             g2d.dispose();
 
             g.drawImage(simView, viewX, viewY, panel);
@@ -240,7 +250,7 @@ public class SimulationView extends View {
             BufferedImage povView = new BufferedImage(viewWidth, viewHeight, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2dPOV = povView.createGraphics();
             g2dPOV.setClip(0, 0, viewWidth, viewHeight);
-            world.drawPOV(g2dPOV);
+            world.drawSimulation(g2dPOV);
             g2dPOV.dispose();
 
             g.drawImage(povView, viewX, viewY, panel);

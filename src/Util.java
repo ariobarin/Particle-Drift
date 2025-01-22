@@ -1,6 +1,6 @@
 /*
  * Util.java
- * Ario Barin Ostovary
+ * Ario Barin Ostovary & Kevin Dang
  * Class for utility functions
  */
 
@@ -49,6 +49,7 @@ public class Util {
         if (prob <= 0.0 || prob >= 1.0) {
             throw new IllegalArgumentException("Probability must be between 0 and 1 exclusive");
         }
+        // log(prob / (1 - prob))
         return Math.log(prob / (1.0 - prob));
     }
 
@@ -61,7 +62,7 @@ public class Util {
     }
 
     public static void drawImage(Graphics g, BufferedImage img, int x, int y, int width, int height) {
-        // Draw the image with nearest neighbor interpolation - no blurring
+        // draw the image with nearest neighbor interpolation - no blurring
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         g2d.drawImage(img, x, y, width, height, null);
@@ -73,9 +74,11 @@ public class Util {
     }
 
     public static void drawCenteredText(Graphics g, String text, int x, int y, int size) {
+        // center the text based on the width of the text
         FontMetrics metrics = g.getFontMetrics(new Font("Arial", Font.BOLD, size));
         int textWidth = metrics.stringWidth(text);
         int textHeight = metrics.getHeight();
+
         g.drawString(text, x - textWidth / 2, y - textHeight / 2);
     }
 
@@ -84,34 +87,34 @@ public class Util {
         drawOrientedRoundedRect(g, position, width, height, radius, true);
     }
 
-
+    // draw a rounded rectangle at the position with the rotation of the directed point
     public static void drawOrientedRoundedRect(Graphics g, MyDirectedPoint position, int width, int height,
             int radius, boolean filled) {
-        // draw the rectangle at the position with the rotation of the directed point
+        // get the point and angle of the directed point
         MyPoint point = position.getPoint();
         double angle = position.getRadians();
 
         Graphics2D g2d = (Graphics2D) g;
 
-        // Save the original transform
+        // save the original transform
         var oldTransform = g2d.getTransform();
 
         try {
-            // Translate to the position and rotate
+            // translate to the position and rotate
             g2d.translate(point.getX(), point.getY());
             g2d.rotate(angle);
 
-            // Move back by half width/height to center the rectangle
+            // move back by half width/height to center the rectangle
             g2d.translate(-width / 2, -height / 2);
 
-            // Draw the rounded rectangle (filled or outlined)
+            // draw the rounded rectangle (filled or outlined)
             if (filled) {
                 g2d.fillRoundRect(0, 0, width, height, radius * 2, radius * 2);
             } else {
                 g2d.drawRoundRect(0, 0, width, height, radius * 2, radius * 2);
             }
         } finally {
-            // Restore the original transform
+            // restore the original transform
             g2d.setTransform(oldTransform);
         }
     }
@@ -123,22 +126,22 @@ public class Util {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        // Save the original transform
+        // save the original transform
         var oldTransform = g2d.getTransform();
 
         try {
-            // Translate to the position and rotate
+            // translate to the position and rotate
             g2d.translate(point.getX(), point.getY());
             g2d.rotate(angle);
 
-            // Move back by half width/height to center the image
+            // move back by half width/height to center the image
             g2d.translate(-width / 2, -height / 2);
 
-            // Draw the image with nearest neighbor interpolation - no blurring
+            // draw the image with nearest neighbor interpolation - no blurring
             g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g2d.drawImage(img, 0, 0, width, height, null);
         } finally {
-            // Restore the original transform
+            // restore the original transform
             g2d.setTransform(oldTransform);
         }
     }

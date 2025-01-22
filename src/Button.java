@@ -1,7 +1,7 @@
 /*
  * Button.java
  * Ario Barin Ostovary
- * class for creating interactive GUI buttons with hover effects and state management
+ * Class for creating interactive GUI buttons with hover effects and state management
  */
 
 import java.awt.*;
@@ -67,10 +67,11 @@ public class Button {
         }
     }
 
-    // renders the button with appropriate colors based on state and hover status
+    // draws the button with colors based on state and hover status
     public void draw(Graphics g) {
         updatePosition();  // update position before drawing
         
+        // can be hovered and/or disabled
         if (isHovered) {
             g.setColor(state ? ENABLED_HOVER_COLOR : DISABLED_HOVER_COLOR);
         } else {
@@ -92,12 +93,10 @@ public class Button {
         onClick.run();
     }
 
-    // updates the button's enabled/disabled state
     public void setState(boolean state) {
         this.state = state;
     }
 
-    // updates the button's hover status
     public void setHovered(boolean hovered) {
         this.isHovered = hovered;
     }

@@ -1,7 +1,7 @@
 /*
  * Vector.java
  * Ario Barin Ostovary
- * Class for a vector in 2D space (direction and magnitude)
+ * Class for a vector - direction and magnitude
  */
 
 public class MyVector {
@@ -51,17 +51,25 @@ public class MyVector {
     }
 
     public MyVector add(MyVector other) {
+        // add the vectors - component-wise
         double x = direction.getCos() * magnitude + other.getDirection().getCos() * other.getMagnitude();
         double y = direction.getSin() * magnitude + other.getDirection().getSin() * other.getMagnitude();
         return new MyVector(new MyAngle(Math.atan2(y, x)), Math.sqrt(x * x + y * y));
     }
 
     public MyVector subtract(MyVector other) {
-        return add(other.scale(-1));
+        // subtract the vectors - component-wise (add the negative of the other vector)
+        return add(other.scaled(-1));
     }
 
-    public MyVector scale(double scalar) {
+    public MyVector scaled(double scalar) {
+        // scale the vector by a scalar
         return new MyVector(direction, magnitude * scalar);
+    }
+
+    public MyVector normalized() {
+        // normalize the vector - divide by the magnitude
+        return scaled(1 / magnitude);
     }
 
     @Override

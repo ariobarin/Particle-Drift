@@ -1,12 +1,7 @@
 /* RealView.java
- *
-
-Ario Barin Ostovary & Kevin Dang
- 
-this class implements the car simulation using real life lidar data
-*/ 
-
-
+ * Ario Barin Ostovary & Kevin Dang
+ * This class implements the car simulation using real life lidar data
+ */
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,7 +12,7 @@ import java.util.List;
 
 public class RealView extends View {
 
-    private CarSocket carSocket; // Socket to communicate with the car
+    private CarSocket carSocket; // socket to communicate with the car
 
     private String IP32 = "10.217.210.22";
     private int PORT32 = 8080;
