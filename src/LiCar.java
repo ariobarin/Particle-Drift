@@ -10,17 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LiCar {
+    private final Simulation simulation;
+
     private final Lidar lidar;
     private final Tank tank;
     private List<MyVector> lidarReadings;
 
     private final ParticleFilter particleFilter;
 
-    public LiCar(int x, int y, double angle,
-            int moveForward, int moveBackward,
-            int rotateAntiClockwise, int rotateClockwise) {
-        tank = new Tank(x, y, angle, moveForward, moveBackward, rotateAntiClockwise, rotateClockwise);
-        lidar = new Lidar();
+    public LiCar(Simulation simulation, int x, int y, double angle) {
+        this.simulation = simulation;
+        tank = new Tank(x, y, angle);
+        lidar = new Lidar(simulation);
         lidarReadings = new ArrayList<>();
 
         // particleFilter = new ParticleFilter(new OccupancyGrid("background.png", Color.BLACK, Color.WHITE, 1));

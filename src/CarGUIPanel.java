@@ -24,9 +24,6 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
     private int frameCount = 0;
     private long lastFPSCheck = 0;
     
-    // view state constants and tracking
-    public static final int MENU = 0, SIM = 1, REAL = 2;
-    private int current;        // current view state
     private View currentView;   // active view object
 
     public CarGUIPanel() {
@@ -49,18 +46,19 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
     }
 
     public void startMenu() {
-        current = MENU;
-        currentView = new MenuView(this, MENU);
+        currentView = new MenuView(this);
     }
 
-    public void startSimulation() {
-        current = SIM;
-        currentView = new SimulationView(new World(), this, SIM);
+    public void startSimulationSelecter() {
+        currentView = new SimulationSelecterView(this);
+    }
+
+    public void startSimulation(String mapFile) {
+        currentView = new SimulationView(this, mapFile);
     }
 
     public void startReal() {
-        current = REAL;
-        currentView = new RealView(this, REAL);
+        currentView = new RealView(this);
     }
 
     public void step() {
@@ -80,24 +78,6 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         }
 
         currentView.step(keysDown, keysPressed);
-    }
-
-    public void updateView() {
-        int next = currentView.nextView();
-        if (next != current) {
-            current = next;
-            switch (current) {
-                case MENU:
-                    startMenu();
-                    break;
-                case SIM:
-                    startSimulation();
-                    break;
-                case REAL:
-                    startReal();
-                    break;
-            }
-        }
     }
 
     @Override
@@ -190,7 +170,5 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
     public void actionPerformed(ActionEvent e) {
         step();
         repaint();
-        // System.out.println("currentView: " + current);
-        updateView();
     }
 }

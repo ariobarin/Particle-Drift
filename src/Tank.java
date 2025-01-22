@@ -7,16 +7,11 @@
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 public class Tank {
     // Tank position
     private final MyDirectedPoint position;
-
-    // Movement keys
-    public final int moveForward;
-    public final int moveBackward;
-    public final int rotateAntiClockwise;
-    public final int rotateClockwise;
 
     // Movement Constants
     private final double MAX_SPEED = 2;
@@ -50,13 +45,13 @@ public class Tank {
     private final double SPEED_NOISE = 0.0;
     private final double ROTATION_NOISE = 0.0;
 
-    public Tank(int x, int y, double angle, int moveForward, int moveBackward, int rotateAntiClockwise,
-            int rotateClockwise) {
-        this.moveForward = moveForward;
-        this.moveBackward = moveBackward;
-        this.rotateAntiClockwise = rotateAntiClockwise;
-        this.rotateClockwise = rotateClockwise;
+    // movement keys
+    private static final int moveForward = KeyEvent.VK_W;
+    private static final int moveBackward = KeyEvent.VK_S;
+    private static final int rotateAntiClockwise = KeyEvent.VK_A;
+    private static final int rotateClockwise = KeyEvent.VK_D;
 
+    public Tank(int x, int y, double angle) {
         position = new MyDirectedPoint(x, y, angle);
 
         // Movement variables
