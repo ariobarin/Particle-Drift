@@ -1,10 +1,8 @@
 
 /* Socket8266.cpp
-
-Kevin Dang
-
-Send and receive data from client
-*/
+ * Kevin Dang
+ * Send and receive data from client
+ */
 
 
 

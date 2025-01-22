@@ -1,10 +1,7 @@
 /* Lidar8266.h
-  * 
-  * Kevin Dang
-  * 
-  * Header file for Lidar8266.cpp
-
-*/
+ * Kevin Dang
+ * Header file for Lidar8266.cpp
+ */
 
 
 

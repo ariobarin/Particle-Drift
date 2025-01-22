@@ -1,9 +1,7 @@
-/*CarSocket.java
- * 
+/*
+ * CarSocket.java
  * Kevin Dang
- * 
  * Connects to the ESP32 and ESP8266 to control the car and receive lidar data
- * 
  */
 import java.io.*;
 import java.util.ArrayList;

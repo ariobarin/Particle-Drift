@@ -1,9 +1,7 @@
 /* Stepper32.cpp
-
-Kevin Dang
-
-Controls stepper, turns stepper motor by angle or steps, keeps track of steps
-*/ 
+ * Kevin Dang
+ * Controls stepper, turns stepper motor by angle or steps, keeps track of steps
+ */ 
 
 
 #include "Stepper32.h"

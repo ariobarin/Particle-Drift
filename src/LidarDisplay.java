@@ -1,18 +1,12 @@
+/*
+ * LidarDisplay.java
+ * Kevin Dang
+ * Test class for displaying the lidar data, ESP32 data, ESP8266 data, stepper angle, and encoder data
+ */
 
- /*LidarDisplay.java
-  * 
-Kevin Dang
-
-Test class for displaying the lidar data, ESP32 data, ESP8266 data, stepper angle, and encoder data
-  */
- 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-
-
-
 
 
 public class LidarDisplay extends JFrame{

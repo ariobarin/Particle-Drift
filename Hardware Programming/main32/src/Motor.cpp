@@ -1,9 +1,6 @@
 /* Motor.cpp
-    
-    Kevin Dang
-    
-    Motor class for controlling motors, keeps track of encoder ticks
-
+ * Kevin Dang
+ * Motor class for controlling motors, keeps track of encoder ticks
 */
 
 

@@ -1,7 +1,6 @@
-/* SocketClient.java
- * 
+/* 
+ * SocketClient.java
  * Kevin Dang
- * 
  * class to connect to the server socket
  */
 

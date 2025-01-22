@@ -1,7 +1,5 @@
 /* main8266.cpp 
- * 
  * Kevin Dang
- * 
  * Reads Lidar, creates wifi server, sends data to client
 */
 

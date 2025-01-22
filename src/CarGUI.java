@@ -10,7 +10,7 @@ public class CarGUI extends JFrame {
     CarGUIPanel panel = new CarGUIPanel();
 
     public CarGUI() {
-        super("Car GUI with SLAM");
+        super("GUI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(panel);
         pack();

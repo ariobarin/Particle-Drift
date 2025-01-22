@@ -1,9 +1,7 @@
 /*Socket8266.h 
-
-Kevin Dang
-
-Header file for Socket8266.cpp
-*/
+ * Kevin Dang
+ * Header file for Socket8266.cpp
+ */
 
 
 

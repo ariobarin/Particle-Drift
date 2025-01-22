@@ -1,8 +1,7 @@
 /* 
  * CarGUIPanel.java
  * Ario Barin Ostovary & Kevin Dang
- * 
- * this class implements a GUI panel for a car simulation/visualization system
+ * This class implements a GUI panel for a car simulation/visualization system
  */
 
 import java.awt.*;

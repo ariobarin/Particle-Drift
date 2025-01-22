@@ -1,7 +1,5 @@
 /* Lidar8266.cpp
- * 
  * Kevin Dang
- * 
  * Read data from Lidar
  */
 

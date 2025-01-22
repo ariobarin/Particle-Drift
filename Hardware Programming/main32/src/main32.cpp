@@ -1,22 +1,18 @@
 
 /* main32.cpp
-
-Kevin Dang
-
-Controls the movement of the car, sends and receives data from the server
-*/
+ * Kevin Dang
+ * Controls the movement of the car, sends and receives data from the server
+ */
 
 #include <Arduino.h>
 #include "Socket8266.h"
 #include "Motor.h"
 #include "Stepper32.h"
 //custom libraries
-const char* ssid = "Virgin AIG_EXT";      
-const char* password = "ginggiang0";      
+const char* ssid = "";      
+const char* password = "";      
 const int port = 1024;              
 
-// const char* ssid = "Ario";
-// const char* password = "ArioBario@0";
 
 //wifi info 
 

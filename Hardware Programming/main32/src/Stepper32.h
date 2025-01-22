@@ -1,9 +1,7 @@
 /* Stepper32.h
-
-Kevin Dang
-
-Header file for Stepper32 class
-*/
+ * Kevin Dang
+ * Header file for Stepper32 class
+ */
 
 
 #include <Arduino.h>

@@ -1,9 +1,7 @@
 /* Motor.h
-
-Kevin Dang
-
-Header file for Motor class
-*/
+ * Kevin Dang
+ * Header file for Motor class
+ */
 
 #include <Arduino.h>
 
