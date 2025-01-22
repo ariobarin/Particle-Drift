@@ -1,3 +1,15 @@
+/* Lidar8266.h
+  * 
+  * Kevin Dang
+  * 
+  * Header file for Lidar8266.cpp
+
+*/
+
+
+
+
+
 #ifndef Lidar8266_h
 #define Lidar8266_h
 
@@ -9,10 +21,10 @@
 class Lidar8266 {
   public:
 
-    Lidar8266(int rx, int tx);
-    Lidar8266();
+    Lidar8266(int rx, int tx); //constructor for software serial
+    Lidar8266(); //constructor for hardware serial
 
-    String read();
+    String read(); 
     double getRate();
 
   private:
@@ -23,11 +35,11 @@ class Lidar8266 {
     boolean software;
 
     int tally;
-    unsigned long startMillis;
+    unsigned long startMillis; //start time for rate calculation
     unsigned long currMillis;
     double rate;
 
-    SoftwareSerial* softwareSerial;
+    SoftwareSerial* softwareSerial; //points to software serial object
 
 };
 
