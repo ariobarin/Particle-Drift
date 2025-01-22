@@ -47,7 +47,7 @@ public class SimulationSelecterView extends View {
         // back button
         backButton = new Button(
             () -> 20,
-            () -> 20,
+            () -> 120,
             100, 100,
             backIcon,
             true,

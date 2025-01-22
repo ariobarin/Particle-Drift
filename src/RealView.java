@@ -90,10 +90,10 @@ public class RealView extends View {
 
     @Override
     public void step(boolean[] keysDown, boolean[] keysPressed) {
-        if (keysDown[connectKey] && !carSocket.isESP32Connected() && !carSocket.isESP8266Connected()) {
-            System.out.println("Connecting to car"); //connect to the car
-            carSocket.connectCar(IP32, PORT32, IP8266, PORT8266);
-        }
+        // if (keysDown[connectKey] && !carSocket.isESP32Connected() && !carSocket.isESP8266Connected()) {
+        //     System.out.println("Connecting to car"); //connect to the car
+        //     carSocket.connectCar(IP32, PORT32, IP8266, PORT8266);
+        // }
 
         List<MyVector> lidar = carSocket.getLidar(); //get lidar data
         particleFilter.update(0, 0, lidar); //update slam with positions and lidar data
@@ -110,16 +110,16 @@ public class RealView extends View {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == moveForwardKey) { 
-            carSocket.moveForward();
+            // carSocket.moveForward();
             keysPressed[FORWARD] = true;//keep track of the keys pressed for keystrokes gui
         }  if (key == moveBackwardKey) {
-            carSocket.moveBackward();
+            // carSocket.moveBackward();
             keysPressed[BACKWARD] = true;
         } if (key == turnLeftKey) {
-            carSocket.turnLeft();
+            // carSocket.turnLeft();
             keysPressed[LEFT] = true;
         } if (key == turnRightKey) {
-            carSocket.turnRight();  
+            // carSocket.turnRight();  
             keysPressed[RIGHT] = true;
         }
     }
@@ -130,14 +130,14 @@ public class RealView extends View {
         moving = false;
         if (key == moveForwardKey) {
             keysPressed[FORWARD] = false;
-        } else if (key == moveBackwardKey) {
+        } if (key == moveBackwardKey) {
             keysPressed[BACKWARD] = false;
-        } else if (key == turnLeftKey) {
+        }  if (key == turnLeftKey) {
             keysPressed[LEFT] = false;
-        } else if (key == turnRightKey) {
+        }  if (key == turnRightKey) {
             keysPressed[RIGHT] = false;
         } //stop car
-        carSocket.stopMovement();
+        // carSocket.stopMovement();
     }
 
     @Override

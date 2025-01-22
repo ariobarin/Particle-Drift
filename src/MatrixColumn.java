@@ -24,6 +24,7 @@ public class MatrixColumn {
     // list for the varying trail lengths of the column
     private final ArrayList<Integer> trailLengths;
 
+    // set as true by default to wait until the width and height are greater than 0 to reset
     private boolean resetRequired = true;
 
     public MatrixColumn(Supplier<Integer> widthSupplier, Supplier<Integer> heightSupplier) {
@@ -59,7 +60,9 @@ public class MatrixColumn {
             Color color = new Color(
                 Util.randomInt(0, 128),  // slight red tint
                 Util.randomInt(greenMin, greenMax), // speed-based green with randomness
-                Util.randomInt(0, 192)   // slight blue tint
+                Util.randomInt(0, 192) // slight blue tint
+                // Util.randomInt(0, greenMax)
+                
             );
             heads.add(pos);
             speeds.add(speed);

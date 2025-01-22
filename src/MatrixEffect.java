@@ -56,6 +56,7 @@ public class MatrixEffect {
 
         // draw each column
         for (MatrixColumn column : columns) {
+            // draw the column with the supplied x offset
             column.draw(g, xOffset);
         }
     }

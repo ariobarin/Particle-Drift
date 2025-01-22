@@ -5,7 +5,7 @@ world3.png
 1
 600
 450
-100
-100
+80
+120
 0
 explored1.png

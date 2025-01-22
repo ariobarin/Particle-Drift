@@ -2,7 +2,7 @@
  * SimulationView.java
  * Ario Barin Ostovary
  * Class for the simulation view
- * Displays the simulation view
+ * Displays the simulation view, has buttons to toggle the different views - world, pov, lidar, and slam
  */
 
 import java.awt.Graphics;
@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class SimulationView extends View {
+    // boolean flags for the different views
     private boolean 
     showWorld = false, 
     showPOV = false, 
