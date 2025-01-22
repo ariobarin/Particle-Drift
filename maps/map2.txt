@@ -1,4 +1,3 @@
-
 world2mask.png
 world2.png
 1000

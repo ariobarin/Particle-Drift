@@ -31,7 +31,7 @@ public class MenuView extends View {
         // create left and right matrix effects
         leftMatrixEffect = new MatrixEffect(
             () -> 0,                                 // x offset for left side
-            () -> (panel.getWidth() - MIDDLE_GAP) / 2,     // width for left side
+            () -> (panel.getWidth() - MIDDLE_GAP) / 2 - 40,     // width for left side
             () -> panel.getHeight(),
             60  // half the original columns
         );

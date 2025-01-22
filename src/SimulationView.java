@@ -3,6 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class SimulationView extends View {
     private boolean 
@@ -34,7 +35,11 @@ public class SimulationView extends View {
 
     public SimulationView(CarGUIPanel panel, String mapFile) {
         super(panel);
-        this.world = new Simulation(mapFile);
+        try {
+            this.world = new Simulation(mapFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load simulation", e);
+        }
         viewButtons = new Button[4];
         initializeButtons();
         
@@ -44,7 +49,7 @@ public class SimulationView extends View {
             () -> 10,  // y supplier
             50, 50,    // width, height
             exitIcon, true,               // icon and initial state
-            () -> nextView = CarGUIPanel.MENU  // onClick handler
+            () -> panel.startMenu()  // onClick handler
         );
     }
 
@@ -126,8 +131,7 @@ public class SimulationView extends View {
     public void step(boolean[] keysDown, boolean[] keysPressed) {
         world.update(keysDown);
 
-        if (keysDown[showWorldToggle]) {
-            System.out.println("showWorldToggle");
+        if (keysPressed[showWorldToggle]) {
             showWorld = !showWorld;
             viewButtons[0].setState(showWorld);
             if (!showWorld && !showPOV && !showReadings && !showSLAM) {

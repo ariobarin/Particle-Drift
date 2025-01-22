@@ -8,6 +8,10 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Tank {
     // Tank position
@@ -33,7 +37,7 @@ public class Tank {
 
     // Tank dimensions
     private final double TANK_LENGTH = 50;
-    private final double TANK_WIDTH = 20;
+    private final double TANK_WIDTH = 40;
 
     private final double DRIVE_TIRE_LENGTH = 14;
     private final double DRIVE_TIRE_WIDTH = 5;
@@ -51,6 +55,9 @@ public class Tank {
     private static final int rotateAntiClockwise = KeyEvent.VK_A;
     private static final int rotateClockwise = KeyEvent.VK_D;
 
+    // add image field
+    private BufferedImage carImage;
+
     public Tank(int x, int y, double angle) {
         position = new MyDirectedPoint(x, y, angle);
 
@@ -61,6 +68,13 @@ public class Tank {
         // Rotation variables
         rotationSpeed = 0;
         rotationAcceleration = 0;
+        
+        // load the car image
+        try {
+            carImage = ImageIO.read(new File("assets/licar.png"));
+        } catch (IOException e) {
+            System.err.println("Error loading car image: " + e.getMessage());
+        }
     }
 
     public MyDirectedPoint getPosition() {
@@ -119,37 +133,30 @@ public class Tank {
     }
 
     public void draw(Graphics g) {
-        MyAngle perpendicularAngle = position.getAngle();
-        perpendicularAngle.rotate(Math.PI / 2);
-
-        MyDirectedPoint middleLeft = position.copy();
-        middleLeft.move(TANK_WIDTH / 2, perpendicularAngle);
-
-        MyDirectedPoint middleRight = position.copy();
-        middleRight.move(-TANK_WIDTH / 2, perpendicularAngle);
-
-        drawTire(g, middleLeft, Color.RED, true);
-        drawTire(g, middleRight, Color.RED, true);
-
-        MyDirectedPoint frontLeft = middleLeft.copy();
-        frontLeft.move(TANK_LENGTH / 3);
-
-        MyDirectedPoint frontRight = middleRight.copy();
-        frontRight.move(TANK_LENGTH / 3);
-
-        drawTire(g, frontLeft, Color.GREEN, false);
-        drawTire(g, frontRight, Color.GREEN, false);
-
-        MyDirectedPoint backLeft = middleLeft.copy();
-        backLeft.move(-TANK_LENGTH / 3);
-
-        MyDirectedPoint backRight = middleRight.copy();
-        backRight.move(-TANK_LENGTH / 3);
-
-        drawTire(g, backLeft, Color.BLUE, false);
-        drawTire(g, backRight, Color.BLUE, false);
-
-        g.setColor(new Color(64, 128, 128)); // Aquamarine color RGB values
-        Util.drawOrientedRoundedRect(g, position, (int) TANK_LENGTH, (int) TANK_WIDTH, 10, true);
+        if (carImage != null) {
+            // save the current transform
+            java.awt.Graphics2D g2d = (java.awt.Graphics2D) g;
+            java.awt.geom.AffineTransform old = g2d.getTransform();
+            
+            // translate to car position
+            g2d.translate(position.getX(), position.getY());
+            
+            // rotate (add 90 degrees since image faces up)
+            g2d.rotate(position.getRadians() + Math.PI/2);
+            
+            // calculate scale factors to match tank dimensions
+            double scaleX = TANK_WIDTH / carImage.getWidth();
+            double scaleY = TANK_LENGTH / carImage.getHeight();
+            g2d.scale(scaleX, scaleY);
+            
+            // draw image centered
+            g2d.drawImage(carImage, 
+                -carImage.getWidth()/2, 
+                -carImage.getHeight()/2, 
+                null);
+            
+            // restore the old transform
+            g2d.setTransform(old);
+        }
     }
 }

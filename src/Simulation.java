@@ -9,40 +9,55 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.function.Consumer;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import javax.imageio.ImageIO;
-import javax.json.Json;
-import javax.json.JsonObject;
 import java.io.IOException;
+import java.util.function.Consumer;
+import javax.imageio.ImageIO;
 
 public class Simulation {
     public final int WORLD_WIDTH;
     public final int WORLD_HEIGHT;
 
+
+    private final String mapFile;
+    private final String maskFile;
     private final BufferedImage mask;
     private final BufferedImage bg;
+
+    private final String exploredFile;
+    // private final BufferedImage explored;
+
     private final LiCar licar;
 
     public static final Color AIR = new Color(255, 174, 201);
 
     public Simulation(String mapFile) throws IOException {
-        // load json from "maps/" + mapFile
-        JsonObject mapData = Json.createReader(new FileReader("maps/" + mapFile))
-                                   .readObject();
-        WORLD_WIDTH = mapData.getInt("width");
-        WORLD_HEIGHT = mapData.getInt("height");
-
-        // load mask and bg (buffered images)
-        mask = ImageIO.read(new File("maps/" + mapData.getString("mask")));
-        bg = ImageIO.read(new File("maps/" + mapData.getString("map")));
-
-        licar = new LiCar(this, 
-            mapData.getInt("centerX"),
-            mapData.getInt("centerY"),
-            0
-        );
+        // load txt from "maps/" + mapFile
+        BufferedReader reader = new BufferedReader(new FileReader("maps/" + mapFile));
+        // read map data
+        this.maskFile = reader.readLine();
+        this.mapFile = reader.readLine();
+        int width = Integer.parseInt(reader.readLine());
+        int height = Integer.parseInt(reader.readLine());
+        int resolution = Integer.parseInt(reader.readLine());
+        int centerX = Integer.parseInt(reader.readLine());
+        int centerY = Integer.parseInt(reader.readLine());
+        int startX = Integer.parseInt(reader.readLine());
+        int startY = Integer.parseInt(reader.readLine());
+        double startAngle = Double.parseDouble(reader.readLine());
+        this.exploredFile = reader.readLine();
+        
+        this.WORLD_WIDTH = width * resolution;
+        this.WORLD_HEIGHT = height * resolution;
+        
+        // load images from the maps directory
+        mask = ImageIO.read(new File("maps/" + maskFile));
+        bg = ImageIO.read(new File("maps/" + this.mapFile));
+        
+        // OccupancyGrid occupancyGrid = new OccupancyGrid("maps/" + maskFile, AIR, WORLD_WIDTH, WORLD_HEIGHT, WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 1);
+        licar = new LiCar(this, WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0, new ParticleFilter());
     }
 
     public boolean isAir(int x, int y) {
@@ -66,7 +81,7 @@ public class Simulation {
     }
 
     public void drawBackground(Graphics g) {
-        g.drawImage(bg, 0, 0, null);
+        g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
     }
 
     private void drawView(

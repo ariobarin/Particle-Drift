@@ -1,4 +1,3 @@
-
 world4mask.png
 world4.png
 1400

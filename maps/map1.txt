@@ -1,6 +1,5 @@
-
-mask1.png
-map1.png
+world1mask.png
+world1.png
 800
 600
 1
