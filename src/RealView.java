@@ -1,3 +1,13 @@
+/* RealView.java
+ *
+
+Ario Barin Ostovary & Kevin Dang
+ 
+this class implements the real view of the car simulation/visualization system
+*/ 
+
+
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
