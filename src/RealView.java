@@ -68,34 +68,10 @@ public class RealView extends View {
 
     private final ParticleFilter particleFilter;
 
-<<<<<<< Updated upstream
     public RealView(CarGUIPanel panel, int viewIndex) {
         super(panel, viewIndex);
         carSocket = new CarSocket(); //initialize the car socket
          particleFilter = new ParticleFilter(); //initialize slam
-=======
-    private static final BufferedImage exitIcon;
-    private final Button exitButton;
-
-    static {
-        exitIcon = Util.loadImage("assets/exit_icon.png");
-    }
-
-    public RealView(CarGUIPanel panel) {
-        super(panel);
-
-        carSocket = new CarSocket();
-        particleFilter = new ParticleFilter();
-
-        // create exit button in top-left corner
-        exitButton = new Button(
-            () -> 10,  // x supplier
-            () -> 10,  // y supplier
-            50, 50,    // width, height
-            exitIcon, true,               // icon and initial state
-            () -> panel.startMenu()  // onClick handler
-        );
->>>>>>> Stashed changes
     }
 
     @Override
