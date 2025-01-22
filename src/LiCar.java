@@ -18,14 +18,13 @@ public class LiCar {
 
     private final ParticleFilter particleFilter;
 
-    public LiCar(Simulation simulation, int x, int y, double angle) {
+    public LiCar(Simulation simulation, int x, int y, double angle, ParticleFilter particleFilter) {
         this.simulation = simulation;
         tank = new Tank(x, y, angle);
         lidar = new Lidar(simulation);
         lidarReadings = new ArrayList<>();
 
-        // particleFilter = new ParticleFilter(new OccupancyGrid("background.png", Color.BLACK, Color.WHITE, 1));
-        particleFilter = new ParticleFilter();
+        this.particleFilter = particleFilter;
     }
 
     public MyDirectedPoint getActualPosition() {

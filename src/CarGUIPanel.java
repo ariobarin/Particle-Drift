@@ -71,13 +71,13 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
             lastFPSCheck = currentTime;
         }
         // System.out.println("FPS: " + currentFPS);
+        currentView.step(keysDown, keysPressed);
 
         // clear keysPressed
         for (int i = 0; i < keysPressed.length; i++) {
             keysPressed[i] = false;
         }
 
-        currentView.step(keysDown, keysPressed);
     }
 
     @Override

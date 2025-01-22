@@ -1,4 +1,3 @@
-
 world5mask.png
 world5.png
 2000

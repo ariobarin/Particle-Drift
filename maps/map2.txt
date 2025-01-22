@@ -1,9 +1,8 @@
-
 world2mask.png
 world2.png
 1000
 800
-2  
+2
 50
 750
 0

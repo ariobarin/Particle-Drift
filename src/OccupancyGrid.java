@@ -110,6 +110,30 @@ public class OccupancyGrid {
         }
     }
 
+    public OccupancyGrid(String filename, Color freeColor, int width, int height, int centerX, int centerY, int cellSize) throws IOException {
+        BufferedImage image = ImageIO.read(new File(filename));
+
+        this.width = width;
+        this.height = height;
+        this.grid = filledGrid(width, height);
+        
+        this.cellSize = cellSize;
+        this.centerX = centerX;
+        this.centerY = centerY;
+
+        this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        updateImage();
+
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                grid[x][y] = Util.probToLogit(image.getRGB(x, y) == freeColor.getRGB() ? 0.2 : 0.8);
+            }
+        }
+
+        updateImage();
+    }
+
     public double[][] getGrid() { return grid; }
 
     public int getWidth() { return width; }

@@ -21,8 +21,8 @@ public class ParticleFilter {
 
     private static final int RESOLUTION = 5;
 
-    private static final int STARTING_WIDTH = 800;
-    private static final int STARTING_HEIGHT = 600;
+    private static final int STARTING_WIDTH = 100;
+    private static final int STARTING_HEIGHT = 100;
 
     private static final double INITIAL_POSITION_STDDEV = 50.0;
     private static final double INITIAL_BEARING_STDDEV = 0.0;
@@ -61,9 +61,13 @@ public class ParticleFilter {
 
         for (int i = 0; i < NUM_PARTICLES_START; i++) {
             // Generate uniform random positions within the grid bounds
-            double x = Util.randomDouble(-worldWidth, worldWidth);
-            double y = Util.randomDouble(-worldHeight, worldHeight);
-            double angle = Util.randomDouble(0, 2 * Math.PI); // Random angle between 0 and 2π
+            // double x = Util.randomDouble(-worldWidth, worldWidth);
+            // double y = Util.randomDouble(-worldHeight, worldHeight);
+            // double angle = Util.randomDouble(0, 2 * Math.PI); // Random angle between 0 and 2π
+
+            double x = 0;
+            double y = 0;
+            double angle = 0;
 
             MyDirectedPoint noisyPose = new MyDirectedPoint(x, y, angle);
             particles.add(new Particle(noisyPose, occupancyGrid));
@@ -160,21 +164,20 @@ public class ParticleFilter {
     }
 
     public void update(double speed, double rotation, List<MyVector> lidarReadings) {
-        // predict(speed, rotation);
-        // updateWeights(lidarReadings);
+        predict(speed, rotation);
+        updateWeights(lidarReadings);
 
-        // // Calculate number of particles based on linear interpolation
-        int numParticles = 1;
-        // if (particleFilterCountDown > 0) {
-        //     double progress = (double) particleFilterCountDown / RESAMPLE_COUNT_DOWN;
-        //     numParticles = (int) (NUM_PARTICLES_END + (NUM_PARTICLES_START - NUM_PARTICLES_END) * progress);
-        //     particleFilterCountDown--;
-        // } else {
-        //     numParticles = NUM_PARTICLES_END;
-        // }
-        // resample(numParticles);
+        // Calculate number of particles based on linear interpolation
+        int numParticles;
+        if (particleFilterCountDown > 0) {
+            double progress = (double) particleFilterCountDown / RESAMPLE_COUNT_DOWN;
+            numParticles = (int) (NUM_PARTICLES_END + (NUM_PARTICLES_START - NUM_PARTICLES_END) * progress);
+            particleFilterCountDown--;
+        } else {
+            numParticles = NUM_PARTICLES_END;
+        }
+        resample(numParticles);
 
-        // System.out.println(lidarReadings);
         updateGrid(lidarReadings);
     }
 

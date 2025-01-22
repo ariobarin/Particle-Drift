@@ -18,11 +18,13 @@ public class MenuView extends View {
     private static final BufferedImage simulationButtonIcon;
     private static final BufferedImage realButtonIcon;
     private static final BufferedImage backgroundRoad;
+    private static final BufferedImage titleImage;
 
     static {
         simulationButtonIcon = Util.loadImage("assets/sim_icon.png");
         realButtonIcon = Util.loadImage("assets/real_icon.png");
         backgroundRoad = Util.loadImage("assets/main_bg.png");
+        titleImage = Util.loadImage("assets/title.png");
     }
 
     public MenuView(CarGUIPanel panel) {
@@ -31,7 +33,7 @@ public class MenuView extends View {
         // create left and right matrix effects
         leftMatrixEffect = new MatrixEffect(
             () -> 0,                                 // x offset for left side
-            () -> (panel.getWidth() - MIDDLE_GAP) / 2,     // width for left side
+            () -> (panel.getWidth() - MIDDLE_GAP) / 2 - 40,     // width for left side
             () -> panel.getHeight(),
             60  // half the original columns
         );
@@ -131,6 +133,9 @@ public class MenuView extends View {
         // draw matrix effects
         leftMatrixEffect.draw(g);
         rightMatrixEffect.draw(g);
+        
+        // draw title image
+        g.drawImage(titleImage, getWidth()/2 - 400, 50, 800, 200, null);
         
         // draw buttons on top
         simulationButton.draw(g);
