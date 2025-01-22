@@ -1,37 +1,63 @@
 /*
- * name: Ario Barin Ostovary
+ * Ario Barin Ostovary
  */
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 public class MenuView extends View {
     private final Button simulationButton;
     private final Button realButton;
-    private final MatrixEffect matrixEffect;
+    private final MatrixEffect leftMatrixEffect;
+    private final MatrixEffect rightMatrixEffect;
+
+    private static final int MIDDLE_GAP = 200;
+    private static final BufferedImage simulationButtonIcon;
+    private static final BufferedImage realButtonIcon;
+    private static final BufferedImage backgroundRoad;
+
+    static {
+        simulationButtonIcon = Util.loadImage("assets/sim_icon.png");
+        realButtonIcon = Util.loadImage("assets/real_icon.png");
+        backgroundRoad = Util.loadImage("assets/main_bg.png");
+    }
 
     public MenuView(CarGUIPanel panel, int viewIndex) {
         super(panel, viewIndex);
         
-        matrixEffect = new MatrixEffect(() -> panel.getWidth());
+        // create left and right matrix effects
+        leftMatrixEffect = new MatrixEffect(
+            () -> 0,                                 // x offset for left side
+            () -> (panel.getWidth() - MIDDLE_GAP) / 2,     // width for left side
+            () -> panel.getHeight(),
+            60  // half the original columns
+        );
+        
+        rightMatrixEffect = new MatrixEffect(
+            () -> panel.getWidth() / 2 + MIDDLE_GAP / 2,   // x offset for right side
+            () -> (panel.getWidth() - MIDDLE_GAP) / 2,     // width for right side
+            () -> panel.getHeight(),
+            60  // half the original columns
+        );
         
         // create buttons with dynamic positioning
         simulationButton = new Button(
-            () -> panel.getWidth()/2 - 150,           // x supplier
-            () -> panel.getHeight()/2 - 75,           // y supplier
-            300, 50,                                  // width, height
-            Util.loadImage("assets/simulation_button.png"),
+            () -> panel.getWidth()/2 - 40,           // x supplier
+            () -> panel.getHeight()/2 - 100,           // y supplier
+            80, 100,                                  // width, height
+            simulationButtonIcon,
             true,                                     // initial state
             () -> nextView = CarGUIPanel.SIM         // onClick handler
         );
         
         realButton = new Button(
-            () -> panel.getWidth()/2 - 150,           // x supplier
-            () -> panel.getHeight()/2 + 25,           // y supplier
-            300, 50,                                  // width, height
-            Util.loadImage("assets/real_button.png"),
+            () -> panel.getWidth()/2 - 40,           // x supplier
+            () -> panel.getHeight()/2 + 50,           // y supplier
+            80, 100,                                  // width, height
+            realButtonIcon,
             true,                                     // initial state
             () -> nextView = CarGUIPanel.REAL         // onClick handler
         );
@@ -39,7 +65,8 @@ public class MenuView extends View {
 
     @Override
     public void step(boolean[] keysDown, boolean[] keysPressed) {
-        matrixEffect.update(panel.getWidth(), panel.getHeight());
+        leftMatrixEffect.update();
+        rightMatrixEffect.update();
     }
 
     @Override
@@ -97,9 +124,13 @@ public class MenuView extends View {
         // clear background to black first
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
+
+        // draw background road
+        g.drawImage(backgroundRoad, getWidth()/2 - 50, 0, 100, getHeight(), null);
         
-        // draw matrix effect
-        matrixEffect.draw(g);
+        // draw matrix effects
+        leftMatrixEffect.draw(g);
+        rightMatrixEffect.draw(g);
         
         // draw buttons on top
         simulationButton.draw(g);

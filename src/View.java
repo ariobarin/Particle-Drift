@@ -11,8 +11,8 @@ public abstract class View {
         this.nextView = viewIndex;
     }
 
-    public int getWidth() { return panel.getWidth(); }
-    public int getHeight() { return panel.getHeight(); }
+    protected int getWidth() { return panel.getWidth(); }
+    protected int getHeight() { return panel.getHeight(); }
 
     public abstract void step(boolean[] keysDown, boolean[] keysPressed);
 

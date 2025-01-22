@@ -16,12 +16,23 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.imageio.ImageIO;
 
 public class Util {
+    // these methods are thread safe
     public static double randomGaussian(double standardDeviation) {
         return ThreadLocalRandom.current().nextGaussian() * standardDeviation;
     }
-
     public static double randomDouble(double start, double end) {
         return ThreadLocalRandom.current().nextDouble(start, end);
+    }
+    public static int randomInt(int start, int end) {
+        if (start == end) {
+            return start;
+        }
+        // validate that end is greater than start
+        if (end < start) {
+            // hopefully this doesn't cause bugs
+            return ThreadLocalRandom.current().nextInt(end, start);
+        }
+        return ThreadLocalRandom.current().nextInt(start, end);
     }
 
     public static double logitToProb(double logit) {
