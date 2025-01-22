@@ -3,7 +3,7 @@
 
 Kevin Dang
 
-send and receive data from client
+Send and receive data from client
 */
 
 

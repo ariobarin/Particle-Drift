@@ -92,7 +92,7 @@ public class RealView extends View {
     public void step(boolean[] keysDown, boolean[] keysPressed) {
         if (keysDown[connectKey] && !carSocket.isESP32Connected() && !carSocket.isESP8266Connected()) {
             System.out.println("Connecting to car"); //connect to the car
-            // carSocket.connectCar(IP32, PORT32, IP8266, PORT8266);
+            carSocket.connectCar(IP32, PORT32, IP8266, PORT8266);
         }
 
         List<MyVector> lidar = carSocket.getLidar(); //get lidar data
@@ -110,16 +110,16 @@ public class RealView extends View {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == moveForwardKey) { 
-            // carSocket.moveForward();
+            carSocket.moveForward();
             keysPressed[FORWARD] = true;//keep track of the keys pressed for keystrokes gui
         }  if (key == moveBackwardKey) {
-            // carSocket.moveBackward();
+            carSocket.moveBackward();
             keysPressed[BACKWARD] = true;
         } if (key == turnLeftKey) {
-            // carSocket.turnLeft();
+            carSocket.turnLeft();
             keysPressed[LEFT] = true;
         } if (key == turnRightKey) {
-            // carSocket.turnRight();  
+            carSocket.turnRight();  
             keysPressed[RIGHT] = true;
         }
     }
@@ -137,7 +137,7 @@ public class RealView extends View {
         } else if (key == turnRightKey) {
             keysPressed[RIGHT] = false;
         } //stop car
-        // carSocket.stopMovement();
+        carSocket.stopMovement();
     }
 
     @Override
@@ -159,11 +159,9 @@ public class RealView extends View {
     }
 
     private void drawGUI(Graphics g) {
-        // Draw Connection Status Panel
         drawPanel(g, "Connection Status", CONNECTION_PANEL_X, CONNECTION_PANEL_Y, CONNECTION_PANEL_WIDTH, CONNECTION_PANEL_HEIGHT);
         drawConnectionStatus(g); //draw the connection status
 
-        // Draw Motor Data Panel
         drawPanel(g, "Motor Data", MOVEMENT_PANEL_X, MOVEMENT_PANEL_Y, MOVEMENT_PANEL_WIDTH, MOVEMENT_PANEL_HEIGHT);
         drawMotorData(g); //draw the motor data and keystrokes
 
@@ -203,7 +201,7 @@ public class RealView extends View {
         int boxHeight = 30;  // height of each box
         int xOffset = 25;  // offset from the left
         int yOffset = MOVEMENT_PANEL_Y + (MOVEMENT_PANEL_HEIGHT - 2 * boxHeight - 10) / 2 - 2;  //centered vertically in panel
-        int gap = 5;  // Gap between the boxes
+        int gap = 5;  // gap between the boxes
         Color pressedColor = LIGHT_GREEN;
         Color defaultColor = DARK_GRAY;
     
