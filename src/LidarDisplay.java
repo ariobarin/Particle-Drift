@@ -1,5 +1,10 @@
 
- 
+ /*LidarDisplay.java
+  * 
+Kevin Dang
+
+Test class for displaying the lidar data, ESP32 data, ESP8266 data, stepper angle, and encoder data
+  */
  
 import java.awt.*;
 import java.awt.event.*;
@@ -45,7 +50,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 	private int PORT32 = 8080;
 	private String IP8266 = "10.217.210.187";
 	private int PORT8266 = 80;
-	
+		//ip and port for the ESP32 and ESP8266
 	public GamePanel(){
 		keys = new boolean[256]; // Initialize the keys array
 		addKeyListener(this);
@@ -60,7 +65,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 	public void actionPerformed(ActionEvent e){
 		repaint(); 
 
-		if(keys[KeyEvent.VK_UP]&&!LiCar.isESP32Connected()&&!LiCar.isESP8266Connected()){
+		if(keys[KeyEvent.VK_UP]&&!LiCar.isESP32Connected()&&!LiCar.isESP8266Connected()){ // Connect to the car if the up key is pressed
 			LiCar.connectCar(IP32, PORT32, IP8266, PORT8266);
 		}
 
@@ -71,14 +76,14 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 		int key = ke.getKeyCode();
 		keys[key] = false;
 		moving = false;
-		LiCar.stopMovement();
+		LiCar.stopMovement(); // Stop the car from moving when the key is released
 	}	
 	
 	@Override
 	public void keyPressed(KeyEvent ke){
-		int key = ke.getKeyCode();
+		int key = ke.getKeyCode(); 
 		keys[key] = true;
-		if(moving){
+		if(moving){ // If the car is moving, don't allow the user to change the direction
 			return;
 		}
 		if(keys[KeyEvent.VK_W]){
@@ -131,7 +136,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 		drawESP8266Connected(g);
 		drawStepperAngle(g);
 		drawEncoder(g);
-		drawLidarData(g);
+		// drawLidarData(g);
+		//draw the lidar, ESP32 data, ESP8266 data, stepper angle, and encoder data
     }
 
 	private void clear(Graphics g){
@@ -142,11 +148,12 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 	private void drawLidar(Graphics g){
 		g.setColor(Color.RED);
 		double angle = (LiCar.getStepper()*Math.PI/180);
-		g.drawOval(WIDTH/2-50, HEIGHT/2-50, 100, 100);
+		g.drawOval(WIDTH/2-50, HEIGHT/2-50, 100, 100); // Draw the circle that represents the lidar
 		g.drawLine(WIDTH/2, HEIGHT/2, WIDTH/2 + (int)Math.round(50*(Math.cos(angle))), (int)Math.round(HEIGHT/2 + 50*(Math.sin(angle))));
+		// draw the line that represents the lidar data
 	}
 	private void drawESP32(Graphics g){
-		g.setColor(Color.BLACK);
+		g.setColor(Color.BLACK); // Draw the ESP32 data
 		g.drawString("ESP32 Data: "+LiCar.getLatestESP32Data(), 50, 55);
 	}
 
@@ -156,7 +163,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 	}
 	private void drawESP32Connected(Graphics g){
 		if(LiCar.isESP32Connected()){
-			g.setColor(Color.GREEN);
+			g.setColor(Color.GREEN); // Draw the ESP32 connection status
 		}else{
 			g.setColor(Color.RED);
 		}
@@ -165,11 +172,11 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
 	private void drawESP8266Connected(Graphics g){
 		if(LiCar.isESP8266Connected()){
-			g.setColor(Color.GREEN);
+			g.setColor(Color.GREEN); // draw the ESP8266 connection status
 		}else{
 			g.setColor(Color.RED);
 		}
-		g.drawRect(10, 85, 30, 30);
+		g.drawRect(10, 85, 30, 30); 
 	}
 
 	private void drawStepperAngle(Graphics g){
@@ -183,10 +190,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 		g.drawString("Right Encoder: " + LiCar.getRightEncoder(), 10, 230);
 	}
 
-	private void drawLidarData(Graphics g) {
-		LiCar.getLidar();
+	// private void drawLidarData(Graphics g) {
 
-
-	}
+	// }
 }
 
