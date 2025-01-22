@@ -78,6 +78,8 @@ public class CarGUIPanel extends JPanel implements KeyListener, ActionListener, 
         for (int i = 0; i < keysPressed.length; i++) {
             keysPressed[i] = false;
         }
+
+        currentView.step(keysDown, keysPressed);
     }
 
     public void updateView() {

@@ -29,7 +29,7 @@ public class SimulationView extends View {
         povIcon = Util.loadImage("assets/local_icon.png");
         lidarIcon = Util.loadImage("assets/lidar_icon.png");
         slamIcon = Util.loadImage("assets/slam_icon.png");
-        exitIcon = Util.loadImage("assets/exit_icon.png");
+        exitIcon = Util.loadImage("assets/back_icon.png");
     }
 
     public SimulationView(World world, CarGUIPanel panel, int viewIndex) {
@@ -58,10 +58,8 @@ public class SimulationView extends View {
             () -> 10,                                                 // y supplier
             iconWidth, iconHeight, worldIcon, showWorld,
             () -> {
-                if (showPOV || showReadings || showSLAM) {
-                    showWorld = !showWorld;
-                    viewButtons[0].setState(showWorld);
-                }
+                showWorld = !showWorld;
+                viewButtons[0].setState(showWorld);
             }
         );
 
@@ -70,10 +68,8 @@ public class SimulationView extends View {
             () -> 10,                                                 // y supplier
             iconWidth, iconHeight, povIcon, showPOV,
             () -> {
-                if (showWorld || showReadings || showSLAM) {
-                    showPOV = !showPOV;
-                    viewButtons[1].setState(showPOV);
-                }
+                showPOV = !showPOV;
+                viewButtons[1].setState(showPOV);
             }
         );
 
@@ -82,10 +78,8 @@ public class SimulationView extends View {
             () -> 10,                                                 // y supplier
             iconWidth, iconHeight, lidarIcon, showReadings,
             () -> {
-                if (showWorld || showPOV || showSLAM) {
-                    showReadings = !showReadings;
-                    viewButtons[2].setState(showReadings);
-                }
+                showReadings = !showReadings;
+                viewButtons[2].setState(showReadings);
             }
         );
 
@@ -94,10 +88,8 @@ public class SimulationView extends View {
             () -> 10,                                                 // y supplier
             iconWidth, iconHeight, slamIcon, showSLAM,
             () -> {
-                if (showWorld || showPOV || showReadings) {
-                    showSLAM = !showSLAM;
-                    viewButtons[3].setState(showSLAM);
-                }
+                showSLAM = !showSLAM;
+                viewButtons[3].setState(showSLAM);
             }
         );
     }
@@ -134,18 +126,35 @@ public class SimulationView extends View {
     public void step(boolean[] keysDown, boolean[] keysPressed) {
         world.update(keysDown);
 
-        if (keysPressed[showWorldToggle] && (showPOV || showReadings || showSLAM)) {
+        if (keysDown[showWorldToggle]) {
+            System.out.println("showWorldToggle");
             showWorld = !showWorld;
             viewButtons[0].setState(showWorld);
-        } else if (keysPressed[showPOVToggle] && (showWorld || showReadings || showSLAM)) {
+            if (!showWorld && !showPOV && !showReadings && !showSLAM) {
+                showWorld = true;
+                viewButtons[0].setState(true);
+            }
+        } else if (keysPressed[showPOVToggle]) {
             showPOV = !showPOV;
             viewButtons[1].setState(showPOV);
-        } else if (keysPressed[showReadingsToggle] && (showWorld || showPOV || showSLAM)) {
+            if (!showWorld && !showPOV && !showReadings && !showSLAM) {
+                showPOV = true;
+                viewButtons[1].setState(true);
+            }
+        } else if (keysPressed[showReadingsToggle]) {
             showReadings = !showReadings;
             viewButtons[2].setState(showReadings);
-        } else if (keysPressed[showSLAMToggle] && (showWorld || showPOV || showReadings)) {
+            if (!showWorld && !showPOV && !showReadings && !showSLAM) {
+                showReadings = true;
+                viewButtons[2].setState(true);
+            }
+        } else if (keysPressed[showSLAMToggle]) {
             showSLAM = !showSLAM;
             viewButtons[3].setState(showSLAM);
+            if (!showWorld && !showPOV && !showReadings && !showSLAM) {
+                showSLAM = true;
+                viewButtons[3].setState(true);
+            }
         }
     }
 
