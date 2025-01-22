@@ -1,81 +1,40 @@
-#include "Stepper32.h"
+/* Stepper32.h
+
+Kevin Dang
+
+Header file for Stepper32 class
+*/
 
 
-Stepper32::Stepper32(int dirPin, int stepPin, int stepsPerRevolution){
-	this->dirPin = dirPin;
-	this->stepPin = stepPin;
-	this->stepsPerRevolution = stepsPerRevolution;
-	this->anglePerStep = 360.0 / stepsPerRevolution;
-	this->delayPerStep = 1000;
-	this->currSteps = 0;
+#include <Arduino.h>
 
-	pinMode(dirPin, OUTPUT);
-	pinMode(stepPin, OUTPUT);
+#ifndef Stepper32_H
+#define Stepper32_H
 
-}
+class Stepper32{
 
-void Stepper32::turnAngle(int angle){
-	
-	int numSteps = round(abs(angle)/anglePerStep);
+    public:
 
-	if (angle > 0){
-		digitalWrite(dirPin, HIGH);
-		currSteps += numSteps;
-	}
-	else{
-		digitalWrite(dirPin, LOW);
-		currSteps -= numSteps;
-	}
+        Stepper32(int dirPin, int stepPin, int stepsPerRevolution);
+        void turnAngle(int angle);
+        void turnSteps(int steps);
+        void setDelayPerStep(int microseconds);
+        int getSteps();
+        double getAngle();
+        void setSpeed(int rpm);
+        //public methods for turning a certain angle, turning a certain number of steps, setting delay per step, getting steps, getting angle, and setting speed
+    private:
+        
+        int dirPin;
+        int stepPin;
+        int stepsPerRevolution;
+        float anglePerStep;
+        int delayPerStep; //microseconds to wait betweens steps to make it run
+        // int delay; //milliseconds delay to make it move smoothly and at a certain speed
+        int currSteps;
 
-	for(int x = 0; x < numSteps; x++)
-	{
-		digitalWrite(stepPin, HIGH);
-		delayMicroseconds(delayPerStep);
-		digitalWrite(stepPin, LOW);
-		delayMicroseconds(delayPerStep);
-	}
-
-}
-
-void Stepper32::turnSteps(int steps){
-
-	int numSteps = abs(steps);
-
-	if (steps > 0){
-		digitalWrite(dirPin, HIGH);
-		currSteps += numSteps;
-	}
-	else{
-		digitalWrite(dirPin, LOW);
-		currSteps -= numSteps;
-	}
-	
-	currSteps = currSteps % stepsPerRevolution;
+};
 
 
-	for(int x = 0; x < numSteps; x++){
 
-		digitalWrite(stepPin, HIGH);
-		delayMicroseconds(delayPerStep);
-		digitalWrite(stepPin, LOW);
-		delayMicroseconds(delayPerStep);
-		
-	}
-}
-
-int Stepper32::getSteps(){
-	return currSteps;
-
-}
-
-double Stepper32::getAngle(){
-	return currSteps*anglePerStep;
-}
-
-void Stepper32::setDelayPerStep(int microseconds){
-	delayPerStep = microseconds;
-}
-
-void Stepper32::setSpeed(int rpm) {
-    delayPerStep = 60L * 1000L * 1000L / (rpm * stepsPerRevolution);
-}
+#endif

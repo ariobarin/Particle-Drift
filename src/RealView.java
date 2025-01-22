@@ -3,7 +3,7 @@
 
 Ario Barin Ostovary & Kevin Dang
  
-this class implements the real view of the car simulation/visualization system
+this class implements the car simulation using real life lidar data
 */ 
 
 
@@ -16,12 +16,13 @@ import java.util.List;
 
 public class RealView extends View {
 
-    private CarSocket carSocket;
+    private CarSocket carSocket; // Socket to communicate with the car
 
     private String IP32 = "10.217.210.22";
     private int PORT32 = 8080;
     private String IP8266 = "10.217.210.187";
     private int PORT8266 = 80;
+    //ip and port for the ESP32 and ESP8266
 
     private int connectKey = KeyEvent.VK_UP;
 
@@ -29,23 +30,25 @@ public class RealView extends View {
     private final int moveBackwardKey = KeyEvent.VK_S;
     private final int turnLeftKey = KeyEvent.VK_A;
     private final int turnRightKey = KeyEvent.VK_D;
-
+    //keys for movement
     
 
     private final Color LIGHT_RED = new Color(255, 200, 200);
     private final Color MATRIX_GREEN = new Color(0, 255, 0);
     private final Color DARK_GRAY = new Color(50, 50, 50);
     private final Color LIGHT_GREEN = new Color(0, 255, 0, 128);
-
+    //colors for the GUI
     private boolean[] keysPressed = new boolean[4];
     private final int FORWARD = 0;
     private final int BACKWARD = 1;
     private final int LEFT = 2;
     private final int RIGHT = 3;
+    //movement directions
 
     private boolean moving = false;
+    //movement status
 
-    ;
+    
     private final int CONNECTION_PANEL_HEIGHT = 100;
     private final int CONNECTION_PANEL_WIDTH = 200;
     private final int CONNECTION_PANEL_X = 10;
@@ -61,40 +64,41 @@ public class RealView extends View {
     private final int DATA_PANEL_WIDTH = 200;
     private final int DATA_PANEL_X = 220;
     private final int DATA_PANEL_Y = 10;
+    //panel dimensions and positions
 
     private final ParticleFilter particleFilter;
 
     public RealView(CarGUIPanel panel, int viewIndex) {
         super(panel, viewIndex);
-        carSocket = new CarSocket();
-        particleFilter = new ParticleFilter();
+        carSocket = new CarSocket(); //initialize the car socket
+         particleFilter = new ParticleFilter(); //initialize slam
     }
 
     @Override
     public void step(boolean[] keysDown, boolean[] keysPressed) {
         if (keysDown[connectKey] && !carSocket.isESP32Connected() && !carSocket.isESP8266Connected()) {
-            System.out.println("Connecting to car");
+            System.out.println("Connecting to car"); //connect to the car
             // carSocket.connectCar(IP32, PORT32, IP8266, PORT8266);
         }
 
-        List<MyVector> lidar = carSocket.getLidar();
-        particleFilter.update(0, 0, lidar);
+        List<MyVector> lidar = carSocket.getLidar(); //get lidar data
+        particleFilter.update(0, 0, lidar); //update slam with positions and lidar data
     }
 
     @Override
     public void draw(Graphics g) {
         particleFilter.draw(g);
-        drawGUI(g);
+        drawGUI(g); 
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("key pressed");
+        System.out.println("key pressed"); 
         int key = e.getKeyCode();
         System.out.println("key pressed: " + key);
-        if (key == moveForwardKey) {
+        if (key == moveForwardKey) { 
             // carSocket.moveForward();
-            keysPressed[FORWARD] = true;
+            keysPressed[FORWARD] = true;//keep track of the keys pressed for keystrokes gui
             System.out.println("move forward");
         }  if (key == moveBackwardKey) {
             // carSocket.moveBackward();
@@ -123,7 +127,7 @@ public class RealView extends View {
             keysPressed[LEFT] = false;
         } else if (key == turnRightKey) {
             keysPressed[RIGHT] = false;
-        }
+        } //stop car
         // carSocket.stopMovement();
     }
 
@@ -142,30 +146,30 @@ public class RealView extends View {
     private void drawGUI(Graphics g) {
         // Draw Connection Status Panel
         drawPanel(g, "Connection Status", CONNECTION_PANEL_X, CONNECTION_PANEL_Y, CONNECTION_PANEL_WIDTH, CONNECTION_PANEL_HEIGHT);
-        drawConnectionStatus(g);
+        drawConnectionStatus(g); //draw the connection status
 
         // Draw Motor Data Panel
         drawPanel(g, "Motor Data", MOVEMENT_PANEL_X, MOVEMENT_PANEL_Y, MOVEMENT_PANEL_WIDTH, MOVEMENT_PANEL_HEIGHT);
-        drawMotorData(g);
+        drawMotorData(g); //draw the motor data and keystrokes
 
         drawKeystrokes(g);
 
     
     }
 
-    private void drawPanel(Graphics g, String title, int x, int y, int width, int height) {
-        g.setColor(Color.BLACK);
+    private void drawPanel(Graphics g, String title, int x, int y, int width, int height) { //custom function to draw a panel
+        g.setColor(Color.BLACK); 
         g.fillRect(x, y, width, height);
         g.setColor(MATRIX_GREEN);
         // g.drawString(title, x + 10, y + 20);
     }
 
     private void drawConnectionStatus(Graphics g) {
-        int statusYOffset = 30;
+        int statusYOffset = 30; // gap between the two statuses
 
-        g.setColor(carSocket.isESP32Connected() ? Color.GREEN : Color.RED);
+        g.setColor(carSocket.isESP32Connected() ? Color.GREEN : Color.RED); //draw the connection status
         g.fillOval(CONNECTION_PANEL_X + 10, CONNECTION_PANEL_Y + 20, 20, 20); // ESP32 status
-        g.setColor(MATRIX_GREEN);
+        g.setColor(MATRIX_GREEN); 
         g.drawString("ESP32 Connected", CONNECTION_PANEL_X + 40, CONNECTION_PANEL_Y + 35);
 
         g.setColor(carSocket.isESP8266Connected() ? Color.GREEN : Color.RED);
@@ -174,49 +178,38 @@ public class RealView extends View {
         g.drawString("ESP8266 Connected", CONNECTION_PANEL_X + 40, CONNECTION_PANEL_Y + 35 + statusYOffset);
     }
 
-    private void drawSensorData(Graphics g) {
-        g.setColor(MATRIX_GREEN);
-        g.drawString("Stepper Angle: " + carSocket.getStepper(), DATA_PANEL_X + 10, DATA_PANEL_Y + 30);
-        g.drawString("Left Encoder: " + carSocket.getLeftEncoder(), DATA_PANEL_X + 10, DATA_PANEL_Y + 50);
-        g.drawString("Right Encoder: " + carSocket.getRightEncoder(), DATA_PANEL_X + 10, DATA_PANEL_Y + 70);
-    }
-
     private void drawMotorData(Graphics g) {
         g.setColor(MATRIX_GREEN);
-        g.drawString("Motor Status: " + (moving ? "Moving" : "Stopped"), MOVEMENT_PANEL_X + 100, MOVEMENT_PANEL_Y + 30);
+        g.drawString("Motor Status: " + (moving ? "Moving" : "Stopped"), MOVEMENT_PANEL_X + 100, MOVEMENT_PANEL_Y + 30); //draw the motor status
     }
     private void drawKeystrokes(Graphics g) {
         g.setColor(MATRIX_GREEN);
-        int boxWidth = 30;  // Smaller box width
-        int boxHeight = 30; // Smaller box height
-        int xOffset = 25; 
-        int yOffset = MOVEMENT_PANEL_Y + (MOVEMENT_PANEL_HEIGHT - 2 * boxHeight - 10) / 2 - 2; // Centered in Motor Data panel
+        int boxWidth = 30;   // width of each box
+        int boxHeight = 30;  // height of each box
+        int xOffset = 25;  // offset from the left
+        int yOffset = MOVEMENT_PANEL_Y + (MOVEMENT_PANEL_HEIGHT - 2 * boxHeight - 10) / 2 - 2;  //centered vertically in panel
         int gap = 5;  // Gap between the boxes
         Color pressedColor = LIGHT_GREEN;
         Color defaultColor = DARK_GRAY;
     
-        // Draw box for "W" (Move Forward) at the top
-        g.setColor(keysPressed[FORWARD] ? pressedColor : defaultColor);
-        g.fillRect(xOffset + boxWidth, yOffset, boxWidth, boxHeight);  // Positioned slightly right from center
+        g.setColor(keysPressed[FORWARD] ? pressedColor : defaultColor); //change the color of the box if the key is pressed
+        g.fillRect(xOffset + boxWidth, yOffset, boxWidth, boxHeight); //draw box
         g.setColor(Color.WHITE);
         g.drawString("W", xOffset + boxWidth + (boxWidth - g.getFontMetrics().stringWidth("W")) / 2, yOffset + (boxHeight + g.getFontMetrics().getHeight()) / 2);
-    
-        // Draw box for "S" (Move Backward) directly below "W"
+        //draw letter
         g.setColor(keysPressed[BACKWARD] ? pressedColor : defaultColor);
-        g.fillRect(xOffset + boxWidth, yOffset + boxHeight + gap, boxWidth, boxHeight);  // Directly below "W"
+        g.fillRect(xOffset + boxWidth, yOffset + boxHeight + gap, boxWidth, boxHeight); 
         g.setColor(Color.WHITE);
         g.drawString("S", xOffset + boxWidth + (boxWidth - g.getFontMetrics().stringWidth("S")) / 2, yOffset + boxHeight + gap + (boxHeight + g.getFontMetrics().getHeight()) / 2);
-    
-        // Draw box for "A" (Turn Left) to the left of "S"
+        //same process for the rest of the keys
         g.setColor(keysPressed[LEFT] ? pressedColor : defaultColor);
-        g.fillRect(xOffset - gap, yOffset + boxHeight, boxWidth, boxHeight);  // Positioned left from "S"
+        g.fillRect(xOffset - gap, yOffset + boxHeight, boxWidth, boxHeight);  
         g.setColor(Color.WHITE);
         g.drawString("A", xOffset  - gap + (boxWidth - g.getFontMetrics().stringWidth("A")) / 2, yOffset + boxHeight + (boxHeight + g.getFontMetrics().getHeight()) / 2);
     
-        // Draw box for "D" (Turn Right) to the right of "S"
         g.setColor(keysPressed[RIGHT] ? pressedColor : defaultColor);
 
-        g.fillRect(xOffset + 2 * boxWidth + gap, yOffset + boxHeight, boxWidth, boxHeight);  // Positioned right from "S"
+        g.fillRect(xOffset + 2 * boxWidth + gap, yOffset + boxHeight, boxWidth, boxHeight); 
         g.setColor(Color.WHITE);
         g.drawString("D", xOffset + 2 * boxWidth + gap + (boxWidth - g.getFontMetrics().stringWidth("D")) / 2, yOffset + boxHeight + (boxHeight + g.getFontMetrics().getHeight()) / 2);
     }
