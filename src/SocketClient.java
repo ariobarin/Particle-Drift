@@ -1,7 +1,14 @@
+/* SocketClient.java
+ * 
+ * Kevin Dang
+ * 
+ * class to connect to the server socket
+ */
+
+
 import java.io.*;
 import java.net.*;
 
-//import threads
 
 public class SocketClient  {
 
@@ -12,14 +19,14 @@ public class SocketClient  {
 
     public SocketClient(String ip, int port) throws IOException {
 
-        startConnection(ip, port);
+        startConnection(ip, port); 
 
     }
     public void startConnection(String ip, int port) throws IOException {
         
-        client = new Socket(ip, port);
-        out = new PrintWriter(client.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        client = new Socket(ip, port); // connect to the server
+        out = new PrintWriter(client.getOutputStream(), true); // create an output stream to send messages to the server
+        in = new BufferedReader(new InputStreamReader(client.getInputStream())); // create an input stream to receive messages from the server
         System.out.println("Connected to server");
 
     }
@@ -37,7 +44,7 @@ public class SocketClient  {
             return msg;
         }
         else{
-            return "-+-";
+            return "-+-"; // return a string that will not be a valid message
         }
     }
     
@@ -46,6 +53,6 @@ public class SocketClient  {
         in.close();
         out.close();
         client.close();
-
+        // close the input and output streams and the socket
     }
 }
