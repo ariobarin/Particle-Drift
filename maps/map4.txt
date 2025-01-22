@@ -3,9 +3,9 @@ world4.png
 1400
 1000
 1
+700
+500
 50
 950
-0
-0
 0
 explored1.png
