@@ -1,3 +1,10 @@
+/*
+ * SimulationView.java
+ * Ario Barin Ostovary
+ * Class for the simulation view
+ * Displays the simulation view
+ */
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -43,13 +50,13 @@ public class SimulationView extends View {
         viewButtons = new Button[4];
         initializeButtons();
         
-        // create exit button in top-left corner
+        // create exit button in top-left corner with 2x size
         exitButton = new Button(
-            () -> 10,  // x supplier
-            () -> 10,  // y supplier
-            50, 50,    // width, height
+            () -> 20,  // x supplier (adjusted for larger size)
+            () -> 20,  // y supplier (adjusted for larger size)
+            100, 100,  // width, height (2x larger)
             exitIcon, true,               // icon and initial state
-            () -> panel.startMenu()  // onClick handler
+            () -> panel.startSimulationSelecter()  // onClick handler - fixed to return to simulation selector
         );
     }
 

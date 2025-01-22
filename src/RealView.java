@@ -69,11 +69,11 @@ public class RealView extends View {
 
     private final ParticleFilter particleFilter;
 
-    private static final BufferedImage exitIcon;
-    private final Button exitButton;
-
+    private Button backButton;  // add back button field
+    private static final BufferedImage backIcon;  // add back icon field
+    
     static {
-        exitIcon = Util.loadImage("assets/exit_icon.png");
+        backIcon = Util.loadImage("assets/back_icon.png");  // load back icon
     }
 
     public RealView(CarGUIPanel panel) {
@@ -81,13 +81,14 @@ public class RealView extends View {
 
         carSocket = new CarSocket();
         particleFilter = new ParticleFilter();
-
-        // create exit button in top-left corner
-        exitButton = new Button(
-            () -> 10,  // x supplier
-            () -> 10,  // y supplier
-            50, 50,    // width, height
-            exitIcon, true,               // icon and initial state
+        
+        // create back button in top-left corner
+        backButton = new Button(
+            () -> 20,  // x position
+            () -> 20,  // y position
+            100, 100,  // width, height
+            backIcon,  // icon
+            true,      // initial state
             () -> panel.startMenu()  // onClick handler
         );
     }
@@ -106,7 +107,8 @@ public class RealView extends View {
     @Override
     public void draw(Graphics g) {
         particleFilter.draw(g);
-        drawGUI(g); 
+        drawGUI(g);
+        backButton.draw(g);  // draw back button
     }
 
     @Override
@@ -149,10 +151,16 @@ public class RealView extends View {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        // check back button click
+        if (backButton.contains(e.getX(), e.getY())) {
+            backButton.click();
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        // update back button hover state
+        backButton.setHovered(backButton.contains(e.getX(), e.getY()));
     }
 
     private void drawGUI(Graphics g) {

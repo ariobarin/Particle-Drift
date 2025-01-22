@@ -135,7 +135,7 @@ public class MenuView extends View {
         rightMatrixEffect.draw(g);
         
         // draw title image
-        g.drawImage(titleImage, getWidth()/2 - 400, 50, 800, 200, null);
+        g.drawImage(titleImage, getWidth()/2 - 400, 10, 800, 200, null);
         
         // draw buttons on top
         simulationButton.draw(g);

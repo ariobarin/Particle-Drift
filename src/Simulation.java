@@ -57,7 +57,7 @@ public class Simulation {
         bg = ImageIO.read(new File("maps/" + this.mapFile));
         
         // OccupancyGrid occupancyGrid = new OccupancyGrid("maps/" + maskFile, AIR, WORLD_WIDTH, WORLD_HEIGHT, WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 1);
-        licar = new LiCar(this, WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0, new ParticleFilter());
+        licar = new LiCar(this, centerX + startX, centerY + startY, startAngle, new ParticleFilter());
     }
 
     public boolean isAir(int x, int y) {
@@ -65,7 +65,11 @@ public class Simulation {
             return false;
         }
 
-        return mask.getRGB(x, y) == AIR.getRGB();
+        try {
+            return mask.getRGB(x, y) == AIR.getRGB();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public int getWidth() {
