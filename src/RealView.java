@@ -52,8 +52,8 @@ public class RealView extends View {
     
     private final int CONNECTION_PANEL_HEIGHT = 100;
     private final int CONNECTION_PANEL_WIDTH = 200;
-    private final int CONNECTION_PANEL_X = 10;
-    private final int CONNECTION_PANEL_Y = 10;
+    private final int CONNECTION_PANEL_X = getWidth() - CONNECTION_PANEL_WIDTH - 10;
+    private final int CONNECTION_PANEL_Y = getHeight() - CONNECTION_PANEL_HEIGHT - 10;
 
     private final int MOVEMENT_PANEL_WIDTH = 250;
     private final int MOVEMENT_PANEL_HEIGHT = 100;
