@@ -1,2 +1,13 @@
 /.vscode
 /lib
+.pio/
+bin/
+*.class
+*.o
+*.obj
+*.d
+*.elf
+*.hex
+.vscode/
+libdeps/
+*.dblite
