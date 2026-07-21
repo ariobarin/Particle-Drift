@@ -101,3 +101,7 @@ to so drive commands and LIDAR packets flow between the two.
   building your own.
 - The original roadmap (menu, map loader, map editor, live car mode) is still the
   guiding feature list for the UI.
+
+## License
+
+This project is released under the [MIT License](LICENSE).
