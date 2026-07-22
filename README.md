@@ -12,6 +12,8 @@ questions at once: "where am I?" and "what does the world around me look like?".
 result is a self-contained, visual implementation of the standard SLAM loop (predict,
 observe, weight, resample, update the map) that you can watch update frame by frame.
 
+![Particle-Drift simulation: live LIDAR readings (left) and the occupancy grid being built (right)](docs/simulation-screenshot.png)
+
 ## What it does
 
 - Drives a car through a 2D world using keyboard controls.
